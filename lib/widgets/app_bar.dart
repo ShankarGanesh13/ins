@@ -1,3 +1,4 @@
+import 'package:flikcar_inspection/screens/home_screen/home_screen.dart';
 import 'package:flikcar_inspection/utils/app_fonts.dart';
 import 'package:flutter/material.dart';
 
@@ -11,11 +12,19 @@ class CustomAppbar extends StatelessWidget {
       backgroundColor: const Color(0xff161F31),
       title: Row(
         children: [
-          Image.asset(
-            "assets/app_icons/white_app_icon.png",
-            height: 55,
-            width: 55,
-            fit: BoxFit.fill,
+          GestureDetector(
+            onTap: () {
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => const HomeScreen()),
+                  (route) => false);
+            },
+            child: Image.asset(
+              "assets/app_icons/white_app_icon.png",
+              height: 55,
+              width: 55,
+              fit: BoxFit.fill,
+            ),
           ),
           const SizedBox(
             width: 15,

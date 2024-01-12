@@ -51,7 +51,7 @@ class Upload1Image extends StatelessWidget {
                   decoration: BoxDecoration(
                     border: Border.all(color: const Color(0xffE0E0E0)),
                   ),
-                  child: Image.network(
+                  child: Image.network( 
                     image,
                     height: 150,
                     width: MediaQuery.of(context).size.width / 2,

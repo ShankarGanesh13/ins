@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'dart:typed_data';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flikcar_inspection/services/vehicle_inspection_service.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -10,54 +12,11 @@ import 'package:flikcar_inspection/utils/app_fonts.dart';
 import 'package:flikcar_inspection/widgets/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 
 class UploadImagesService extends ChangeNotifier {
   FirebaseStorage storage = FirebaseStorage.instance;
-  Future<String> selectImageFromCamera({required BuildContext context}) async {
-    XFile? file = await ImagePicker()
-        .pickImage(source: ImageSource.camera, imageQuality: 70);
-    if (file != null) {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => ImageEditorScreen(image: File(file.path))));
-      return file.path;
-    } else {
-      return '';
-    }
-  }
-
-  Future<List<String>> selectImageFromGallery(
-      {required BuildContext context}) async {
-    List<String> imageUrls = [];
-
-    List<XFile>? files = await ImagePicker().pickMultiImage(imageQuality: 60);
-
-    if (files == null || files.isEmpty) {
-      debugPrint("No Image Selected");
-      // No images selected
-      ScaffoldMessenger.of(context).showSnackBar(MySnackbar.showSnackBar(
-          context: context, message: "No Images Selected", duration: 2));
-      return imageUrls;
-    }
-    if (files.isNotEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(MySnackbar.showSnackBar(
-          context: context, message: "Uploading", duration: 5));
-      for (XFile file in files) {
-        String imageName = DateTime.now().millisecondsSinceEpoch.toString();
-        Reference storageReference = storage.ref().child('images/$imageName');
-        UploadTask uploadTask = storageReference.putFile(File(file.path));
-
-        await uploadTask.whenComplete(() async {
-          String imageUrl = await storageReference.getDownloadURL();
-          imageUrls.add(imageUrl);
-        });
-      }
-    }
-    debugPrint("$imageUrls");
-    return imageUrls;
-  }
 
   FilePickerResult? result;
 
@@ -144,23 +103,86 @@ class UploadImagesService extends ChangeNotifier {
     }
   }
 
+  carImagesCamera({
+    required BuildContext context,
+    required String type,
+  }) {
+    if (type == "interior") {
+      pickImageCamera(
+        type: "INT",
+        context: context,
+        images: interiorImages,
+      );
+    } else if (type == "exterior") {
+      pickImageCamera(
+        type: "EXT",
+        context: context,
+        images: exteriorImages,
+      );
+    } else if (type == "dents") {
+      pickImageCamera(
+        type: "DENT",
+        context: context,
+        images: dentsImages,
+      );
+    } else if (type == "tyre") {
+      pickImageCamera(
+        type: "TYRE",
+        context: context,
+        images: tyreImages,
+      );
+    } else if (type == "engine") {
+      pickImageCamera(
+        type: "ENGINE",
+        context: context,
+        images: engineImages,
+      );
+    } else if (type == "thumbnail") {
+      pickImageCamera(
+        type: "THUMB",
+        context: context,
+        images: thumbnailImages,
+      );
+    } else if (type == "others") {
+      pickImageCamera(
+        type: "OTHER",
+        context: context,
+        images: otherImages,
+      );
+    } else {
+      print("+++++++++++++++");
+      print("invalid type");
+
+      print("+++++++++++++");
+    }
+  }
+
   ////////////////////
   pickImage(
       {required BuildContext context,
       required bool multipleSelect,
       required String type,
       required List<ImageModel> images}) async {
+    List<XFile>? files = await ImagePicker().pickMultiImage(imageQuality: 60);
     List<File> displayFiles = [];
     try {
-      result = await FilePicker.platform.pickFiles(
-        type: FileType.image,
-        allowMultiple: multipleSelect,
-      );
-      if (result != null) {
-        result!.files.forEach((element) {
+      // result = await FilePicker.platform.pickFiles(
+      //   type: FileType.image,
+      //   allowMultiple: multipleSelect,
+      // );
+      if (files.isNotEmpty) {
+        files.forEach((element) {
           displayFiles.add(File(element.path.toString()));
         });
-
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              duration: Duration(seconds: 5),
+              backgroundColor: Color(0xFF45C08D),
+              content: Text("Image Uploading, Please wait"),
+            ),
+          );
+        }
         images.addAll(
             await uploadImagesToFirestore(files: displayFiles, type: type));
 
@@ -174,17 +196,6 @@ class UploadImagesService extends ChangeNotifier {
       print(e);
     }
 
-    if (images.isNotEmpty) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            duration: Duration(seconds: 2),
-            backgroundColor: Color(0xFF45C08D),
-            content: Text("Image Selected"),
-          ),
-        );
-      }
-    }
     if (images.isEmpty) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -239,6 +250,58 @@ class UploadImagesService extends ChangeNotifier {
     return imageUrls;
   }
 
+  pickImageCamera(
+      {required BuildContext context,
+      required String type,
+      required List<ImageModel> images}) async {
+    List<File> displayFiles = [];
+    try {
+      // result = await FilePicker.platform.pickFiles(
+      //   type: FileType.image,
+      //   allowMultiple: multipleSelect,
+      // );
+      XFile? file = await ImagePicker()
+          .pickImage(source: ImageSource.camera, imageQuality: 60);
+      if (file != null) {
+        displayFiles.add(File(file.path.toString()));
+
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              duration: Duration(seconds: 5),
+              backgroundColor: Color(0xFF45C08D),
+              content: Text("Image Uploading, Please wait"),
+            ),
+          );
+        }
+        images.addAll(
+            await uploadImagesToFirestore(files: displayFiles, type: type));
+
+        if (type == "THUMB" && images.isNotEmpty) {
+          thumbnailImagePath = images[0].path;
+        }
+
+        notifyListeners();
+      }
+    } catch (e) {
+      print(e);
+    }
+
+    if (images.isEmpty) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            duration: Duration(seconds: 2),
+            backgroundColor: Color(0xFF45C08D),
+            content: Text(
+              "No image selected",
+            ),
+          ),
+        );
+      }
+    }
+  }
+
   ////////////////////////////
   removeImage(
       {required ImageModel image,
@@ -253,7 +316,7 @@ class UploadImagesService extends ChangeNotifier {
     if (type == "dents") {
       dentsImages.remove(image);
     }
-    if (type == "tyres") {
+    if (type == "tyre") {
       tyreImages.remove(image);
     }
     if (type == "engine") {
@@ -283,13 +346,14 @@ class UploadImagesService extends ChangeNotifier {
   }
 
   mergeAllImages() {
-    allImages.addAll(interiorImages);
-    allImages.addAll(exteriorImages);
+    allImages = [];
     allImages.addAll(thumbnailImages);
+    allImages.addAll(exteriorImages);
+    allImages.addAll(interiorImages);
     allImages.addAll(dentsImages);
     allImages.addAll(otherImages);
-    allImages.addAll(engineImages);
     allImages.addAll(tyreImages);
+    allImages.addAll(engineImages);
   }
 
 //
@@ -301,6 +365,8 @@ class UploadImagesService extends ChangeNotifier {
   PlatformFile? pickedVideoFile;
   String? videoFileName;
   File? videoFileToDisplay;
+  String? engineVideoUrl;
+  String? exhaustVideoUrl;
 
   pickVideo({
     required BuildContext context,
@@ -316,20 +382,20 @@ class UploadImagesService extends ChangeNotifier {
         videoFileName = videoResult!.files.first.name;
         pickedVideoFile = videoResult!.files.first;
         videoFileToDisplay = File(pickedVideoFile!.path.toString());
-        print(videoFileToDisplay!.path);
 
         // Check the duration of the selected video
         final videoFile = File(pickedVideoFile!.path.toString());
         final videoDuration = await getVideoDuration(videoFile);
 
         if (videoDuration <= const Duration(seconds: 21)) {
-          print("video selected");
+          debugPrint("video selected");
           if (context.mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                duration: Duration(seconds: 6),
-                backgroundColor: Color(0xFF45C08D),
-                content: Text("Video Uploading"),
+              SnackBar(
+                duration: const Duration(seconds: 10),
+                backgroundColor: const Color(0xFF45C08D),
+                content: const Text("Video Uploading, Please wait"),
+                action: SnackBarAction(label: "Dismiss", onPressed: () {}),
               ),
             );
           }
@@ -341,7 +407,15 @@ class UploadImagesService extends ChangeNotifier {
               storageReference.putFile(videoFileToDisplay!);
           await uploadTask.whenComplete(() async {
             String videoUrl = await storageReference.getDownloadURL();
-            print(videoUrl);
+            debugPrint("====================$videoUrl");
+
+            if (type == "engine") {
+              engineVideoUrl = videoUrl;
+            }
+            if (type == "exhaust") {
+              exhaustVideoUrl = videoUrl;
+            }
+            notifyListeners();
           });
         } else {
           if (context.mounted) {
@@ -361,7 +435,7 @@ class UploadImagesService extends ChangeNotifier {
       print(e);
     }
 
-    if (result == null) {
+    if (videoResult == null) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -392,6 +466,76 @@ class UploadImagesService extends ChangeNotifier {
         images: thumbnailImages);
 
     thumbnailImagePath = thumbnailImages[0].path;
+    notifyListeners();
+  }
+
+  uploadAuctionCarImages(
+      {required String carId, required BuildContext context}) {
+    mergeAllImages();
+    //allImages = [];
+    List<Map<String, String>> imageList = allImages
+        .map((image) => Map<String, String>.from(image.toJson()))
+        .toList();
+    Map<String, dynamic> images = {
+      "images": imageList,
+      "videos": [
+        {
+          "path": engineVideoUrl,
+          "thumb":
+              "https://firebasestorage.googleapis.com/v0/b/flikcar-bac6e.appspot.com/o/001.jpg?alt=media&token=58caa43d-3141-4969-a8ed-d10c51ea8cac",
+          "type": "ENGINE",
+        },
+        {
+          "path": exhaustVideoUrl,
+          "thumb":
+              "https://firebasestorage.googleapis.com/v0/b/flikcar-bac6e.appspot.com/o/002.jpg?alt=media&token=d47b010c-7b7f-4b9b-ab25-e99e1c31db53",
+          "type": "SILENCER",
+        }
+      ],
+    };
+    allImages.addAll(tyreImages);
+    if (interiorImages.isNotEmpty &&
+        exteriorImages.isNotEmpty &&
+        thumbnailImages.isNotEmpty &&
+        engineImages.isNotEmpty &&
+        tyreImages.isNotEmpty) {
+      try {
+        FirebaseFirestore firestore = FirebaseFirestore.instance;
+        DocumentReference documentReference =
+            firestore.collection("auction_vehicles").doc(carId);
+        documentReference.update(images);
+        Provider.of<VehicleInspectionService>(context, listen: false)
+            .increaseIndex();
+      } catch (e) {
+        debugPrint("error uploading images---------$e");
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          duration: Duration(seconds: 2),
+          backgroundColor: Color(0xFF45C08D),
+          content: Text("Upload all required images"),
+        ),
+      );
+    }
+  }
+
+  clearAllImages() {
+    interiorImages = [];
+    //
+    exteriorImages = [];
+    //
+    engineImages = [];
+    //
+    tyreImages = [];
+    //
+    dentsImages = [];
+    //
+    thumbnailImages = [];
+    //
+    otherImages = [];
+    allImages = [];
+    thumbnailImagePath = "";
     notifyListeners();
   }
 }

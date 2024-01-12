@@ -22,53 +22,57 @@ import 'package:flikcar_inspection/widgets/dateTime_textfield.dart';
 import 'package:flikcar_inspection/widgets/multi_line_textfield.dart';
 import 'package:flikcar_inspection/widgets/primary_button.dart';
 import 'package:flikcar_inspection/widgets/upload1_image.dart';
+import 'package:flikcar_inspection/widgets/upload_basic_images.dart';
 import 'package:flikcar_inspection/widgets/upload_images.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class BasicDocumentDetails extends StatefulWidget {
-  final int vehicleId;
+  final String vehicleId;
   const BasicDocumentDetails({super.key, required this.vehicleId});
   static TextEditingController controller = TextEditingController();
 
-  static String appointmentId = "";
+  static String appointmentId = "7877";
+
   static String customerContactNumber = "";
+  static String inspectorName = "";
+  static int customerExpectedPrice = 0;
   static String city = "";
-  static String registerationType = "";
-  static String registerationNumber = "";
-  static String rcAvailability = "";
-  static String rcCondition = "";
-  static String registerationDate = "";
-  static String fitnessUpto = "";
-  static String toBeScrapped = "";
-  static String registerationState = "";
+  static String? registerationType;
+  static String? registerationNumber;
+  static String? rcAvailability;
+  static String? rcCondition;
+  static String? registerationDate;
+  static String? fitnessUpto;
+  static String? toBeScrapped;
+  static String? registerationState;
   static String? registeredRtoVahan;
   static String? ownershipType;
   static String? brand;
   static String? model;
   static String? varient;
-  static String engineNumber = "";
-  static String chasisNumber = "";
-  static String registeredOwnerName = "";
-  static String manufacturingMonth = "";
+  static String? engineNumber;
+  static String? chasisNumber;
+  static String? registeredOwnerName;
+  static String? manufacturingMonth;
   static int? manufacturingYear;
 
-  static String? fuelType = "";
+  static String? fuelType;
   static String? engineCC;
-  static String hypothecationDetails = "";
+  static String? hypothecationDetails;
   static int? seatingCapacity;
-  static String mismatchRC = "";
-  static String roadTax = "";
+  static String? mismatchRC;
+  static String? roadTax;
   static String? roadTaxValidity;
-  static String insurance = "";
+  static String? insurance;
   static String? insuranceValidity;
-  static String noClaimBonus = "";
-  static String misMatchInsurance = "";
-  static String duplicateKey = "";
-  static String rtoNoc = "";
+  static String? noClaimBonus;
+  static String? misMatchInsurance;
+  static String? duplicateKey;
+  static String? rtoNoc;
   static String? rtoNocIssueDate;
-  static String noc = "";
-  static String ownerSerialNo = "";
+  static String? noc;
+  static String? ownerSerialNo;
 
   static int? registrationYear;
   static String? bodyType;
@@ -100,6 +104,7 @@ class _BasicDocumentDetailsState extends State<BasicDocumentDetails> {
 
   @override
   Widget build(BuildContext context) {
+    String thumbnail = context.watch<UploadImagesService>().thumbnailImagePath;
     return Scaffold(
       body: SingleChildScrollView(
         child: Form(
@@ -114,13 +119,22 @@ class _BasicDocumentDetailsState extends State<BasicDocumentDetails> {
               const SizedBox(
                 height: 20,
               ),
+              // CustomTextField(
+              //     title: "Appointment ID *",
+              //     controller: BasicDocumentDetails.controller,
+              //     keyboardType: TextInputType.name,
+              //     maxLength: 50,
+              //     onChanged: (value) {
+              //       BasicDocumentDetails.appointmentId = value;
+              //     },
+              //     validator: true),
               CustomTextField(
-                  title: "Appointment ID *",
+                  title: "Customer Contact Number *",
                   controller: BasicDocumentDetails.controller,
                   keyboardType: TextInputType.name,
-                  maxLength: 50,
+                  maxLength: 20,
                   onChanged: (value) {
-                    BasicDocumentDetails.appointmentId = value;
+                    BasicDocumentDetails.inspectorName = value;
                   },
                   validator: true),
               CustomTextField(
@@ -130,6 +144,17 @@ class _BasicDocumentDetailsState extends State<BasicDocumentDetails> {
                   maxLength: 10,
                   onChanged: (value) {
                     BasicDocumentDetails.customerContactNumber = value;
+                  },
+                  validator: true),
+
+              CustomTextField(
+                  title: "Customer Expected Price *",
+                  controller: BasicDocumentDetails.controller,
+                  keyboardType: TextInputType.number,
+                  maxLength: 10,
+                  onChanged: (value) {
+                    BasicDocumentDetails.customerExpectedPrice =
+                        int.parse(value);
                   },
                   validator: true),
 
@@ -177,29 +202,20 @@ class _BasicDocumentDetailsState extends State<BasicDocumentDetails> {
                     "Lost with photocopy",
                     "Duplicate",
                   ]),
-              UploadImages(
-                function: () {
+              UploadBasicImages(
+                cameraFunction: () {
                   Provider.of<UploadBasicDetailsService>(context, listen: false)
-                      .selectImage(imageType: "rc", context: context);
+                      .selectImageCamera(imageType: "rc", context: context);
                 },
-                imagePath: [],
-                // context.watch<UploadBasicDetailsService>().rcImages,
+                galleryFunction: () {
+                  Provider.of<UploadBasicDetailsService>(context, listen: false)
+                      .selectImageGallery(imageType: "rc", context: context);
+                },
+                imageType: "rc",
+                imagePath: context.watch<UploadBasicDetailsService>().rcImages,
                 title: "RC Images",
               ),
 
-              // Upload2images(
-              //   title: "RC Images ",
-              //   imagePath1: context.watch<UploadBasicDetails>().rcImage1,
-              //   imagePath2: context.watch<UploadBasicDetails>().rcImage2,
-              //   function1: () {
-              //     Provider.of<UploadBasicDetails>(context, listen: false)
-              //         .pickImage(context: context, type: "rc1");
-              //   },
-              //   function2: () {
-              //     Provider.of<UploadBasicDetails>(context, listen: false)
-              //         .pickImage(context: context, type: "rc2");
-              //   },
-              // ),
               CustomDropDown(
                   title: "RC Condition ",
                   onChanged: (value) {
@@ -294,13 +310,20 @@ class _BasicDocumentDetailsState extends State<BasicDocumentDetails> {
                   },
                   validator: false),
 
-              UploadImages(
-                function: () {
+              UploadBasicImages(
+                imageType: "chassis",
+                cameraFunction: () {
                   Provider.of<UploadBasicDetailsService>(context, listen: false)
-                      .selectImage(imageType: "chassis", context: context);
+                      .selectImageCamera(
+                          imageType: "chassis", context: context);
                 },
-                imagePath: [],
-                // context.watch<UploadBasicDetailsService>().chassisImages,
+                galleryFunction: () {
+                  Provider.of<UploadBasicDetailsService>(context, listen: false)
+                      .selectImageGallery(
+                          imageType: "chassis", context: context);
+                },
+                imagePath:
+                    context.watch<UploadBasicDetailsService>().chassisImages,
                 title: "Chassis Images",
               ),
               CustomTextField(
@@ -366,16 +389,21 @@ class _BasicDocumentDetailsState extends State<BasicDocumentDetails> {
                     "Valid NOC Available",
                     "Not available",
                   ]),
-              UploadImages(
-                function: () {
+              UploadBasicImages(
+                imageType: "hypothecation",
+                cameraFunction: () {
                   Provider.of<UploadBasicDetailsService>(context, listen: false)
-                      .selectImage(
+                      .selectImageCamera(
                           imageType: "hypothecation", context: context);
                 },
-                imagePath: [],
-                //  context
-                //     .watch<UploadBasicDetailsService>()
-                //     .hypothecationImages,
+                galleryFunction: () {
+                  Provider.of<UploadBasicDetailsService>(context, listen: false)
+                      .selectImageGallery(
+                          imageType: "hypothecation", context: context);
+                },
+                imagePath: context
+                    .watch<UploadBasicDetailsService>()
+                    .hypothecationImages,
                 title: "Hypothecation Image",
               ),
 
@@ -417,13 +445,20 @@ class _BasicDocumentDetailsState extends State<BasicDocumentDetails> {
                   BasicDocumentDetails.roadTaxValidity = value;
                 },
               ),
-              UploadImages(
-                function: () {
+              UploadBasicImages(
+                imageType: "roadtax",
+                galleryFunction: () {
                   Provider.of<UploadBasicDetailsService>(context, listen: false)
-                      .selectImage(imageType: "roadtax", context: context);
+                      .selectImageGallery(
+                          imageType: "roadtax", context: context);
                 },
-                imagePath: [],
-                //   context.watch<UploadBasicDetailsService>().roadTaxImages,
+                cameraFunction: () {
+                  Provider.of<UploadBasicDetailsService>(context, listen: false)
+                      .selectImageCamera(
+                          imageType: "roadtax", context: context);
+                },
+                imagePath:
+                    context.watch<UploadBasicDetailsService>().roadTaxImages,
                 title: "Road Tax Images",
               ),
               CustomDropDown(
@@ -437,13 +472,20 @@ class _BasicDocumentDetailsState extends State<BasicDocumentDetails> {
                     "Comprehensive",
                     "Zero Depriciation"
                   ]),
-              UploadImages(
-                function: () {
+              UploadBasicImages(
+                imageType: "insurance",
+                galleryFunction: () {
                   Provider.of<UploadBasicDetailsService>(context, listen: false)
-                      .selectImage(imageType: "insurance", context: context);
+                      .selectImageGallery(
+                          imageType: "insurance", context: context);
                 },
-                imagePath: [],
-                //  context.watch<UploadBasicDetailsService>().insuranceImages,
+                cameraFunction: () {
+                  Provider.of<UploadBasicDetailsService>(context, listen: false)
+                      .selectImageCamera(
+                          imageType: "insurance", context: context);
+                },
+                imagePath:
+                    context.watch<UploadBasicDetailsService>().insuranceImages,
                 title: "Insurance Image",
               ),
 
@@ -472,6 +514,7 @@ class _BasicDocumentDetailsState extends State<BasicDocumentDetails> {
                     BasicDocumentDetails.misMatchInsurance = value;
                   },
                   dropdownItems: const [
+                    "No Missmatch",
                     "Make/Model/Varient",
                     "Chassis Number",
                     "Engine Number",
@@ -483,16 +526,21 @@ class _BasicDocumentDetailsState extends State<BasicDocumentDetails> {
                     BasicDocumentDetails.duplicateKey = value;
                   },
                   dropdownItems: const ["Yes", "No"]),
-              UploadImages(
-                function: () {
+              UploadBasicImages(
+                imageType: "duplicateKeyImage",
+                cameraFunction: () {
                   Provider.of<UploadBasicDetailsService>(context, listen: false)
-                      .selectImage(
+                      .selectImageCamera(
                           imageType: "duplicateKeyImage", context: context);
                 },
-                imagePath: [],
-                // context
-                //     .watch<UploadBasicDetailsService>()
-                //     .duplicateKeyImages,
+                galleryFunction: () {
+                  Provider.of<UploadBasicDetailsService>(context, listen: false)
+                      .selectImageGallery(
+                          imageType: "duplicateKeyImage", context: context);
+                },
+                imagePath: context
+                    .watch<UploadBasicDetailsService>()
+                    .duplicateKeyImages,
                 title: "Duplicate Key",
               ),
 
@@ -507,13 +555,19 @@ class _BasicDocumentDetailsState extends State<BasicDocumentDetails> {
                     "Expired",
                     "Missing"
                   ]),
-              UploadImages(
-                function: () {
+              UploadBasicImages(
+                imageType: "rtoNoc",
+                galleryFunction: () {
                   Provider.of<UploadBasicDetailsService>(context, listen: false)
-                      .selectImage(imageType: "rtoNoc", context: context);
+                      .selectImageGallery(
+                          imageType: "rtoNoc", context: context);
                 },
-                imagePath: [],
-                //context.watch<UploadBasicDetailsService>().rtoNocImages,
+                cameraFunction: () {
+                  Provider.of<UploadBasicDetailsService>(context, listen: false)
+                      .selectImageCamera(imageType: "rtoNoc", context: context);
+                },
+                imagePath:
+                    context.watch<UploadBasicDetailsService>().rtoNocImages,
                 title: "RTO NOC Images",
               ),
 
@@ -578,7 +632,7 @@ class _BasicDocumentDetailsState extends State<BasicDocumentDetails> {
                   keyboardType: TextInputType.number,
                   maxLength: 40,
                   onChanged: (value) {
-                    BasicDocumentDetails.kmsDriven = value;
+                    BasicDocumentDetails.kmsDriven = int.parse(value);
                   },
                   validator: true),
 
@@ -627,9 +681,9 @@ class _BasicDocumentDetailsState extends State<BasicDocumentDetails> {
                   title: "Inspection Score *",
                   controller: BasicDocumentDetails.controller,
                   keyboardType: TextInputType.number,
-                  maxLength: 40,
+                  maxLength: 4,
                   onChanged: (value) {
-                    BasicDocumentDetails.inspectionScore = value;
+                    BasicDocumentDetails.inspectionScore = int.parse(value);
                   },
                   validator: true),
               Upload1Image(
@@ -677,82 +731,97 @@ class _BasicDocumentDetailsState extends State<BasicDocumentDetails> {
               title: "Next",
               function: () {
                 if (formKey.currentState!.validate()) {
-                  String status = Provider.of<UploadBasicDetailsService>(
-                          context,
-                          listen: false)
-                      .uploadData(
-                    appointmentId: BasicDocumentDetails.appointmentId,
-                    custContactNo: BasicDocumentDetails.customerContactNumber,
-                    regType: BasicDocumentDetails.registerationType,
-                    regNo: BasicDocumentDetails.registerationNumber,
-                    bodyType: BasicDocumentDetails.bodyType,
-                    brand: BasicDocumentDetails.brand,
-                    carDescription: BasicDocumentDetails.description,
-                    cc: BasicDocumentDetails.engineCC != null
-                        ? int.parse(BasicDocumentDetails.engineCC!)
-                        : null,
-                    chassisNo: BasicDocumentDetails.chasisNumber,
-                    city: BasicDocumentDetails.city,
-                    color: BasicDocumentDetails.color,
-                    duplicateKey: BasicDocumentDetails.duplicateKey,
-                    engineNo: BasicDocumentDetails.engineNumber,
-                    fittnessUpto: BasicDocumentDetails.fitnessUpto,
-                    fuelType: BasicDocumentDetails.fuelType,
-                    hypoDetails: BasicDocumentDetails.hypothecationDetails,
-                    imagePath: "",
-                    inspectionReport: BasicDocumentDetails.inspectionReport,
-                    inspectionScore: BasicDocumentDetails.inspectionScore,
-                    insurance: BasicDocumentDetails.insurance,
-                    insuranceValidity:
-                        BasicDocumentDetails.insuranceValidity != null
-                            ? int.parse(BasicDocumentDetails.insuranceValidity!)
-                            : null,
-                    kmsDriven: BasicDocumentDetails.kmsDriven,
-                    manufacturingYear: BasicDocumentDetails.manufacturingYear,
-                    maxPower: BasicDocumentDetails.maxPower,
-                    maxTorque: BasicDocumentDetails.maxTorque,
-                    mfgMonth: BasicDocumentDetails.manufacturingMonth,
-                    mileage: BasicDocumentDetails.mileage,
-                    missmatchInsurance: BasicDocumentDetails.misMatchInsurance,
-                    missmatchRC: BasicDocumentDetails.mismatchRC,
-                    model: BasicDocumentDetails.model,
-                    noClaimBonus: BasicDocumentDetails.noClaimBonus,
-                    noc: BasicDocumentDetails.noc,
-                    ownerSerialNo: BasicDocumentDetails.ownerSerialNo,
-                    ownerType: BasicDocumentDetails.ownerType,
-                    rcAvailablilty: BasicDocumentDetails.rcAvailability,
-                    rcCondition: BasicDocumentDetails.rcCondition,
-                    regDate: BasicDocumentDetails.registerationDate,
-                    regOwnerName: BasicDocumentDetails.registeredOwnerName,
-                    regState: BasicDocumentDetails.registerationState,
-                    registrationYear: BasicDocumentDetails.registrationYear,
-                    roadTax: BasicDocumentDetails.roadTax,
-                    roadTaxValidity:
-                        BasicDocumentDetails.roadTaxValidity != null
-                            ? int.parse(BasicDocumentDetails.roadTaxValidity!)
-                            : null,
-                    rtoLocation: BasicDocumentDetails.registeredRtoVahan,
-                    rtoNoc: BasicDocumentDetails.rtoNoc,
-                    rtoNocIssueDate:
-                        BasicDocumentDetails.rtoNocIssueDate != null
-                            ? int.parse(BasicDocumentDetails.rtoNocIssueDate!)
-                            : null,
-                    seat: BasicDocumentDetails.seatingCapacity!,
-                    tobeScraped: BasicDocumentDetails.toBeScrapped,
-                    transmission: BasicDocumentDetails.transmissionType,
-                    variant: BasicDocumentDetails.varient,
-                  );
-                  if (status == "SUCCESS") {
-                    // Provider.of<VehicleInspectionService>(context,
-                    //         listen: false)
-                    //     .increaseIndex();
+                  if (thumbnail != "") {
+                    Provider.of<UploadBasicDetailsService>(context,
+                            listen: false)
+                        .uploadData(
+                      appointmentId: BasicDocumentDetails.appointmentId,
+                      custContactNo: BasicDocumentDetails.customerContactNumber,
+                      regType: BasicDocumentDetails.registerationType,
+                      regNo: BasicDocumentDetails.registerationNumber,
+                      bodyType: BasicDocumentDetails.bodyType,
+                      brand: BasicDocumentDetails.brand,
+                      carDescription: BasicDocumentDetails.description,
+                      cc: BasicDocumentDetails.engineCC != null
+                          ? int.parse(BasicDocumentDetails.engineCC!)
+                          : null,
+                      chassisNo: BasicDocumentDetails.chasisNumber,
+                      city: BasicDocumentDetails.city,
+                      color: BasicDocumentDetails.color,
+                      duplicateKey: BasicDocumentDetails.duplicateKey,
+                      engineNo: BasicDocumentDetails.engineNumber,
+                      fittnessUpto: BasicDocumentDetails.fitnessUpto,
+                      fuelType: BasicDocumentDetails.fuelType,
+                      hypoDetails: BasicDocumentDetails.hypothecationDetails,
+                      inspectionReport: BasicDocumentDetails.inspectionReport,
+                      inspectionScore: BasicDocumentDetails.inspectionScore,
+                      insurance: BasicDocumentDetails.insurance,
+                      insuranceValidity: BasicDocumentDetails
+                                  .insuranceValidity !=
+                              null
+                          ? int.parse(BasicDocumentDetails.insuranceValidity!)
+                          : null,
+                      kmsDriven: BasicDocumentDetails.kmsDriven,
+                      manufacturingYear: BasicDocumentDetails.manufacturingYear,
+                      maxPower: BasicDocumentDetails.maxPower,
+                      maxTorque: BasicDocumentDetails.maxTorque,
+                      mfgMonth: BasicDocumentDetails.manufacturingMonth,
+                      mileage: BasicDocumentDetails.mileage,
+                      missmatchInsurance:
+                          BasicDocumentDetails.misMatchInsurance,
+                      missmatchRC: BasicDocumentDetails.mismatchRC,
+                      model: BasicDocumentDetails.model,
+                      noClaimBonus: BasicDocumentDetails.noClaimBonus,
+                      noc: BasicDocumentDetails.noc,
+                      ownerSerialNo: BasicDocumentDetails.ownerSerialNo,
+                      ownerType: BasicDocumentDetails.ownerType,
+                      rcAvailablilty: BasicDocumentDetails.rcAvailability,
+                      rcCondition: BasicDocumentDetails.rcCondition,
+                      regDate: BasicDocumentDetails.registerationDate,
+                      regOwnerName: BasicDocumentDetails.registeredOwnerName,
+                      regState: BasicDocumentDetails.registerationState,
+                      registrationYear: BasicDocumentDetails.registrationYear,
+                      roadTax: BasicDocumentDetails.roadTax,
+                      roadTaxValidity:
+                          BasicDocumentDetails.roadTaxValidity != null
+                              ? int.parse(BasicDocumentDetails.roadTaxValidity!)
+                              : null,
+                      rtoLocation: BasicDocumentDetails.registeredRtoVahan,
+                      rtoNoc: BasicDocumentDetails.rtoNoc,
+                      rtoNocIssueDate:
+                          BasicDocumentDetails.rtoNocIssueDate != null
+                              ? int.parse(BasicDocumentDetails.rtoNocIssueDate!)
+                              : null,
+                      seat: BasicDocumentDetails.seatingCapacity!,
+                      tobeScraped: BasicDocumentDetails.toBeScrapped,
+                      transmission: BasicDocumentDetails.transmissionType,
+                      variant: BasicDocumentDetails.varient,
+                      carId: widget.vehicleId,
+                      customerExpectedPrice:
+                          BasicDocumentDetails.customerExpectedPrice,
+                      thumbnail: thumbnail,
+                    );
+                    Provider.of<VehicleInspectionService>(context,
+                            listen: false)
+                        .increaseIndex();
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        duration: Duration(seconds: 2),
+                        backgroundColor: Color(0xFF45C08D),
+                        content: Text("Add thumbnail Image"),
+                      ),
+                    );
                   }
                 } else {
-                  print("mmbu");
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      duration: Duration(seconds: 2),
+                      backgroundColor: Color(0xFF45C08D),
+                      content: Text("Upload all required data"),
+                    ),
+                  );
                 }
-
-                Provider.of<VehicleInspectionService>(context, listen: false)
-                    .increaseIndex();
               },
               borderColor: const Color(0xff161F31),
               backgroundColor: const Color(0xff161F31),

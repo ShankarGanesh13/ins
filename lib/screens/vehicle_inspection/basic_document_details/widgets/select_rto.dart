@@ -44,7 +44,7 @@ class RtoDropdown extends StatelessWidget {
                   value: selectedRto,
                   items: snapshot.data!
                       .map((item) => DropdownMenuItem(
-                            value: item.rtoCode,
+                            value: item.rtoName,
                             child: Text("${item.rtoName} ( ${item.rtoCode} )",
                                 style: AppFonts.w500black14),
                           ))

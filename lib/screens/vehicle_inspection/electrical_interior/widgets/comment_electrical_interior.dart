@@ -1,17 +1,18 @@
 import 'package:flikcar_inspection/models/feature_model.dart';
 import 'package:flikcar_inspection/services/upload_basic_details.dart';
+import 'package:flikcar_inspection/services/upload_electrical_interior.dart';
 import 'package:flikcar_inspection/utils/app_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CommentOnElectricalInterior extends StatefulWidget {
-  final String feature;
+  final String type;
 
   final List<FeatureModel> features;
   const CommentOnElectricalInterior({
     super.key,
     required this.features,
-    required this.feature,
+    required this.type,
   });
 
   @override
@@ -31,19 +32,19 @@ class _CommentOnElectricalInteriorState
           return GestureDetector(
             onTap: () {
               if (widget.features[index].isSelected == false) {
+                Provider.of<UploadElectricalInteriorService>(context,
+                        listen: false)
+                    .addCommentsOnEngineTransmission(
+                        feature: widget.features[index].name,
+                        type: widget.type);
                 widget.features[index].isSelected = true;
-
-                Provider.of<UploadBasicDetailsService>(context, listen: false)
-                    .addFeatures(
-                        feature: widget.feature,
-                        id: widget.features[index].name);
               } else if (widget.features[index].isSelected == true) {
                 widget.features[index].isSelected = false;
-
-                Provider.of<UploadBasicDetailsService>(context, listen: false)
-                    .addFeatures(
-                        feature: widget.feature,
-                        id: widget.features[index].name);
+                Provider.of<UploadElectricalInteriorService>(context,
+                        listen: false)
+                    .addCommentsOnEngineTransmission(
+                        feature: widget.features[index].name,
+                        type: widget.type);
               }
               setState(() {});
               //   print(widget.features[index].isSelected);

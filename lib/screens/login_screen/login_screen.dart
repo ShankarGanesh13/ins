@@ -1,13 +1,16 @@
 import 'package:flikcar_inspection/screens/home_screen/home_screen.dart';
 import 'package:flikcar_inspection/screens/login_screen/widgets/login_textfield.dart';
+import 'package:flikcar_inspection/services/auth_service.dart';
 import 'package:flikcar_inspection/utils/app_fonts.dart';
 import 'package:flikcar_inspection/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+  LoginScreen({super.key});
 
   @override
+  String email = "";
+  String password = "";
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xff161F31),
@@ -51,9 +54,12 @@ class LoginScreen extends StatelessWidget {
                           counterText: "",
                           counterStyle:
                               const TextStyle(color: Colors.transparent),
-                          hintText: "User name",
+                          hintText: "Email",
                           hintStyle: AppFonts.w500dark214),
                       maxLength: 30,
+                      onChanged: (value) {
+                        email = value;
+                      },
                     ),
                     const SizedBox(
                       height: 15,
@@ -74,6 +80,9 @@ class LoginScreen extends StatelessWidget {
                           hintStyle: AppFonts.w500dark214),
                       obscureText: true,
                       maxLength: 30,
+                      onChanged: (value) {
+                        password = value;
+                      },
                     ),
                     const SizedBox(
                       height: 25,
@@ -81,11 +90,15 @@ class LoginScreen extends StatelessWidget {
                     PrimaryButton(
                         title: "Login",
                         function: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const HomeScreen(),
-                              ));
+                          AuthService().login(
+                              email: email,
+                              password: password,
+                              context: context);
+                          // Navigator.push(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //       builder: (context) => const HomeScreen(),
+                          //     ));
                         },
                         borderColor: const Color(0xff45C08D),
                         backgroundColor: const Color(0xff45C08D),

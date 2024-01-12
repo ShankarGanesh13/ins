@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class UploadVehicleImages extends StatelessWidget {
-  final int vehicleId;
+  final String vehicleId;
   const UploadVehicleImages({super.key, required this.vehicleId});
 
   @override
@@ -26,7 +26,12 @@ class UploadVehicleImages extends StatelessWidget {
               height: 20,
             ),
             UploadImages(
-              function: () {
+              type: "exterior",
+              cameraFunction: () {
+                Provider.of<UploadImagesService>(context, listen: false)
+                    .carImagesCamera(context: context, type: "exterior");
+              },
+              galleryFunction: () {
                 Provider.of<UploadImagesService>(context, listen: false)
                     .pickCarImages(context: context, type: "exterior");
               },
@@ -34,7 +39,12 @@ class UploadVehicleImages extends StatelessWidget {
               title: "Exterior*",
             ),
             UploadImages(
-              function: () {
+              type: "interior",
+              cameraFunction: () {
+                Provider.of<UploadImagesService>(context, listen: false)
+                    .carImagesCamera(context: context, type: "interior");
+              },
+              galleryFunction: () {
                 Provider.of<UploadImagesService>(context, listen: false)
                     .pickCarImages(context: context, type: "interior");
               },
@@ -42,7 +52,12 @@ class UploadVehicleImages extends StatelessWidget {
               title: "Interior*",
             ),
             UploadImages(
-              function: () {
+              type: "engine",
+              cameraFunction: () {
+                Provider.of<UploadImagesService>(context, listen: false)
+                    .carImagesCamera(context: context, type: "engine");
+              },
+              galleryFunction: () {
                 Provider.of<UploadImagesService>(context, listen: false)
                     .pickCarImages(context: context, type: "engine");
               },
@@ -50,25 +65,40 @@ class UploadVehicleImages extends StatelessWidget {
               title: "Engine*",
             ),
             UploadImages(
-              function: () {
+              type: "tyre",
+              galleryFunction: () {
                 Provider.of<UploadImagesService>(context, listen: false)
                     .pickCarImages(context: context, type: "tyre");
+              },
+              cameraFunction: () {
+                Provider.of<UploadImagesService>(context, listen: false)
+                    .carImagesCamera(context: context, type: "tyre");
               },
               imagePath: context.watch<UploadImagesService>().tyreImages,
               title: "Tyre*",
             ),
             UploadImages(
-              function: () {
+              type: "dents",
+              galleryFunction: () {
                 Provider.of<UploadImagesService>(context, listen: false)
                     .pickCarImages(context: context, type: "dents");
+              },
+              cameraFunction: () {
+                Provider.of<UploadImagesService>(context, listen: false)
+                    .carImagesCamera(context: context, type: "dents");
               },
               imagePath: context.watch<UploadImagesService>().dentsImages,
               title: "Dents",
             ),
             UploadImages(
-              function: () {
+              type: "others",
+              galleryFunction: () {
                 Provider.of<UploadImagesService>(context, listen: false)
                     .pickCarImages(context: context, type: "others");
+              },
+              cameraFunction: () {
+                Provider.of<UploadImagesService>(context, listen: false)
+                    .carImagesCamera(context: context, type: "others");
               },
               imagePath: context.watch<UploadImagesService>().otherImages,
               title: "Others",
@@ -79,8 +109,15 @@ class UploadVehicleImages extends StatelessWidget {
                   Provider.of<UploadImagesService>(context, listen: false)
                       .pickVideo(context: context, type: "engine");
                 },
-                thumbnail: ""),
-            UploadVideo(title: "Exhaust Video", function: () {}, thumbnail: ""),
+                thumbnail: context.watch<UploadImagesService>().engineVideoUrl),
+            UploadVideo(
+                title: "Exhaust Video",
+                function: () {
+                  Provider.of<UploadImagesService>(context, listen: false)
+                      .pickVideo(context: context, type: "exhaust");
+                },
+                thumbnail:
+                    context.watch<UploadImagesService>().exhaustVideoUrl),
             const SizedBox(
               height: 50,
             )
@@ -92,8 +129,10 @@ class UploadVehicleImages extends StatelessWidget {
           child: PrimaryButton(
               title: "Upload",
               function: () {
-                Provider.of<VehicleInspectionService>(context, listen: false)
-                    .increaseIndex();
+                Provider.of<UploadImagesService>(context, listen: false)
+                    .uploadAuctionCarImages(carId: vehicleId, context: context);
+                // Provider.of<VehicleInspectionService>(context, listen: false)
+                //     .increaseIndex();
               },
               borderColor: const Color(0xff161F31),
               backgroundColor: const Color(0xff161F31),

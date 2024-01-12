@@ -7,6 +7,8 @@ class VehicleInspectionService extends ChangeNotifier {
   increaseIndex() {
     if (selectedIndex < 6) {
       selectedIndex++;
+    } else {
+      selectedIndex = 0;
     }
 
     notifyListeners();

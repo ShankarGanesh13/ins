@@ -1,7 +1,10 @@
+import 'package:flikcar_inspection/models/image_model.dart';
 import 'package:flikcar_inspection/screens/vehicle_inspection/basic_document_details/listing_car_features/widgets/features_checkbox.dart';
 import 'package:flikcar_inspection/services/upload_engine_transmisson.dart';
+import 'package:flikcar_inspection/services/upload_images.dart';
 import 'package:flikcar_inspection/services/vehicle_inspection_service.dart';
 import 'package:flikcar_inspection/utils/app_fonts.dart';
+import 'package:flikcar_inspection/widgets/comments_checkbox.dart';
 import 'package:flikcar_inspection/widgets/custom_dropdown.dart';
 import 'package:flikcar_inspection/widgets/primary_button.dart';
 import 'package:flikcar_inspection/widgets/upload1_image.dart';
@@ -11,28 +14,30 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class EngineTransmission extends StatelessWidget {
-  final int vehicleId;
+  final String vehicleId;
   const EngineTransmission({super.key, required this.vehicleId});
 
-  static String engineCondition = "";
-  static String batteryCondition = "";
-  static String coolant = "";
-  static String engineDipStick = "";
-  static String engineOil = "";
-  static String engineMount = "";
-  static String engineBlow = "";
-  static String exhaustSmoke = "";
-  static String radiator = "";
-  static String engineNoise = "";
-  static String clutch = "";
-  static String gear = "";
-  static String brake = "";
-  static String steering = "";
-  static String suspension = "";
-  static String commentsOnTransmisson = "";
+  static String? engineCondition;
+  static String? batteryCondition;
+  static String? coolant;
+  static String? engineDipStick;
+  static String? engineOil;
+  static String? engineMount;
+  static String? engineBlow;
+  static String? exhaustSmoke;
+  static String? radiator;
+  static String? engineNoise;
+  static String? clutch;
+  static String? gear;
+  static String? brake;
+  static String? steering;
+  static String? suspension;
+  static String? commentsOnTransmisson;
 
   @override
   Widget build(BuildContext context) {
+    List<ImageModel> engineImages =
+        context.watch<UploadImagesService>().engineImages;
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -47,7 +52,9 @@ class EngineTransmission extends StatelessWidget {
             ),
             CustomDropDown(
                 title: "Engine Condition ",
-                onChanged: (value) {},
+                onChanged: (value) {
+                  EngineTransmission.engineCondition = value;
+                },
                 dropdownItems: const [
                   "Okay",
                   "Repaired",
@@ -61,7 +68,9 @@ class EngineTransmission extends StatelessWidget {
 
             CustomDropDown(
                 title: "Battery Condition ",
-                onChanged: (value) {},
+                onChanged: (value) {
+                  EngineTransmission.batteryCondition = value;
+                },
                 dropdownItems: const [
                   "Okay",
                   "Changed",
@@ -72,19 +81,27 @@ class EngineTransmission extends StatelessWidget {
                 ]),
             CustomDropDown(
                 title: "Coolant ",
-                onChanged: (value) {},
+                onChanged: (value) {
+                  EngineTransmission.coolant = value;
+                },
                 dropdownItems: const ["Okay", "Leaking", "Dirty", "Level Low"]),
             CustomDropDown(
                 title: "Engine Oil Dipstick ",
-                onChanged: (value) {},
+                onChanged: (value) {
+                  EngineTransmission.engineDipStick = value;
+                },
                 dropdownItems: const ["Okay", "Broken", "Not Available"]),
             CustomDropDown(
                 title: "Engine Oil ",
-                onChanged: (value) {},
+                onChanged: (value) {
+                  EngineTransmission.engineOil = value;
+                },
                 dropdownItems: const ["Okay", "Leaking", "Dirty", "Level Low"]),
             CustomDropDown(
                 title: "Engine Mount ",
-                onChanged: (value) {},
+                onChanged: (value) {
+                  EngineTransmission.engineMount = value;
+                },
                 dropdownItems: const [
                   "Okay",
                   "Broken",
@@ -94,7 +111,9 @@ class EngineTransmission extends StatelessWidget {
                 ]),
             CustomDropDown(
                 title: "Engine Blow By Status ",
-                onChanged: (value) {},
+                onChanged: (value) {
+                  EngineTransmission.engineBlow = value;
+                },
                 dropdownItems: const [
                   "No Blow By",
                   "Permisable Blow By",
@@ -103,17 +122,22 @@ class EngineTransmission extends StatelessWidget {
                 ]),
             CustomDropDown(
                 title: "Exhaust Smoke ",
-                onChanged: (value) {},
+                onChanged: (value) {
+                  EngineTransmission.exhaustSmoke = value;
+                },
                 dropdownItems: const ["Okay", "Black", "Blue", "White"]),
 
             CustomDropDown(
-                title: "Radiator ",
-                onChanged: (value) {},
-                dropdownItems: const [
-                  "Fan Motor Noise",
-                  "Fan Not Working",
-                  "Radiator Damaged"
-                ]),
+              title: "Radiator ",
+              onChanged: (value) {
+                EngineTransmission.radiator = value;
+              },
+              dropdownItems: const [
+                "Fan Motor Noise",
+                "Fan Not Working",
+                "Radiator Damaged"
+              ],
+            ),
             //
             //
             //
@@ -124,7 +148,9 @@ class EngineTransmission extends StatelessWidget {
 
             CustomDropDown(
                 title: "Clutch ",
-                onChanged: (value) {},
+                onChanged: (value) {
+                  EngineTransmission.clutch = value;
+                },
                 dropdownItems: const [
                   "Okay",
                   "Hard",
@@ -133,7 +159,9 @@ class EngineTransmission extends StatelessWidget {
                 ]),
             CustomDropDown(
                 title: "Gear ",
-                onChanged: (value) {},
+                onChanged: (value) {
+                  EngineTransmission.gear = value;
+                },
                 dropdownItems: const [
                   "Okay",
                   "Hard",
@@ -143,7 +171,9 @@ class EngineTransmission extends StatelessWidget {
                 ]),
             CustomDropDown(
                 title: "Brake ",
-                onChanged: (value) {},
+                onChanged: (value) {
+                  EngineTransmission.brake = value;
+                },
                 dropdownItems: const [
                   "Okay",
                   "Ineffective",
@@ -152,7 +182,9 @@ class EngineTransmission extends StatelessWidget {
                 ]),
             CustomDropDown(
                 title: "Steering ",
-                onChanged: (value) {},
+                onChanged: (value) {
+                  EngineTransmission.steering = value;
+                },
                 dropdownItems: const [
                   "Okay",
                   "Abnormal Noise",
@@ -162,7 +194,9 @@ class EngineTransmission extends StatelessWidget {
                 ]),
             CustomDropDown(
                 title: "Suspension ",
-                onChanged: (value) {},
+                onChanged: (value) {
+                  EngineTransmission.suspension = value;
+                },
                 dropdownItems: const [
                   "Okay",
                   "Weak",
@@ -177,10 +211,10 @@ class EngineTransmission extends StatelessWidget {
             const SizedBox(
               height: 20,
             ),
-            FeatureCheckbox(
+            CommentsCheckbox(
               features:
                   context.watch<EngineTransmissonService>().commentsOnEngine,
-              feature: "commentOnBasicDetails",
+              type: "engine",
             ),
             const SizedBox(
               height: 20,
@@ -192,11 +226,11 @@ class EngineTransmission extends StatelessWidget {
             const SizedBox(
               height: 20,
             ),
-            FeatureCheckbox(
+            CommentsCheckbox(
               features: context
                   .watch<EngineTransmissonService>()
                   .commentsOnTransmission,
-              feature: "commentOnBasicDetails",
+              type: "transmission",
             ),
             const SizedBox(
               height: 50,
@@ -210,6 +244,25 @@ class EngineTransmission extends StatelessWidget {
           child: PrimaryButton(
               title: "Next",
               function: () {
+                Provider.of<EngineTransmissonService>(context, listen: false)
+                    .uploadEngineAndTransmissionDetails(
+                  carId: vehicleId,
+                  battery: EngineTransmission.batteryCondition,
+                  brake: EngineTransmission.brake,
+                  clutch: EngineTransmission.clutch,
+                  coolant: EngineTransmission.coolant,
+                  engine: EngineTransmission.engineCondition,
+                  engineBlow: EngineTransmission.engineBlow,
+                  engineMount: EngineTransmission.engineMount,
+                  engineOil: EngineTransmission.engineOil,
+                  engineOilDipstick: EngineTransmission.engineDipStick,
+                  exhaustSmoke: EngineTransmission.exhaustSmoke,
+                  gear: EngineTransmission.gear,
+                  radiator: EngineTransmission.radiator,
+                  steering: EngineTransmission.steering,
+                  suspension: EngineTransmission.suspension,
+                  engineImages: engineImages,
+                );
                 Provider.of<VehicleInspectionService>(context, listen: false)
                     .increaseIndex();
               },

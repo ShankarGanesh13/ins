@@ -1,3 +1,4 @@
+import 'package:flikcar_inspection/services/upload_safety_details.dart';
 import 'package:flikcar_inspection/services/vehicle_inspection_service.dart';
 import 'package:flikcar_inspection/utils/app_fonts.dart';
 import 'package:flikcar_inspection/widgets/custom_dropdown.dart';
@@ -7,19 +8,21 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class SafetyDetails extends StatelessWidget {
-  const SafetyDetails({super.key});
+  final String vehicleId;
+  const SafetyDetails({super.key, required this.vehicleId});
   static TextEditingController controller = TextEditingController();
-  static String airbag = "";
-  static String noOfAirbags = "";
-  static String driverSide = "";
-  static String coDriverSide = "";
-  static String lhsAPillar = "";
-  static String lhsBPillar = "";
-  static String lhsCPillar = "";
-  static String rhsAPillar = "";
-  static String rhsBPillar = "";
-  static String rhsCPillar = "";
-  static String reverseCamera = "";
+  static String? airbag;
+  static String? noOfAirbags;
+  static String? abs;
+  static String? driverSide;
+  static String? coDriverSide;
+  static String? lhsAPillar;
+  static String? lhsBPillar;
+  static String? lhsCPillar;
+  static String? rhsAPillar;
+  static String? rhsBPillar;
+  static String? rhsCPillar;
+  static String? reverseCamera;
 
   // static String = "";
   static List<String> airbagCondition = [
@@ -54,11 +57,15 @@ class SafetyDetails extends StatelessWidget {
                 controller: controller,
                 keyboardType: TextInputType.number,
                 maxLength: 2,
-                onChanged: (value) {},
+                onChanged: (value) {
+                  noOfAirbags = value;
+                },
                 validator: true),
             CustomDropDown(
                 title: "ABS ",
-                onChanged: (value) {},
+                onChanged: (value) {
+                  abs = value;
+                },
                 dropdownItems: const [
                   "Not Applicable",
                   "Okay",
@@ -66,39 +73,57 @@ class SafetyDetails extends StatelessWidget {
                 ]),
             CustomDropDown(
                 title: "Driver Side ",
-                onChanged: (value) {},
+                onChanged: (value) {
+                  driverSide = value;
+                },
                 dropdownItems: airbagCondition),
             CustomDropDown(
                 title: "Co-Driver Side ",
-                onChanged: (value) {},
+                onChanged: (value) {
+                  coDriverSide = value;
+                },
                 dropdownItems: airbagCondition),
             CustomDropDown(
                 title: "LHS A Piller ",
-                onChanged: (value) {},
+                onChanged: (value) {
+                  lhsAPillar = value;
+                },
                 dropdownItems: airbagCondition),
             CustomDropDown(
                 title: "LHS B Piller ",
-                onChanged: (value) {},
+                onChanged: (value) {
+                  lhsBPillar = value;
+                },
                 dropdownItems: airbagCondition),
             CustomDropDown(
                 title: "LHS C Piller ",
-                onChanged: (value) {},
+                onChanged: (value) {
+                  lhsCPillar = value;
+                },
                 dropdownItems: airbagCondition),
             CustomDropDown(
                 title: "RHS A Piller ",
-                onChanged: (value) {},
+                onChanged: (value) {
+                  rhsAPillar = value;
+                },
                 dropdownItems: airbagCondition),
             CustomDropDown(
                 title: "RHS B Piller ",
-                onChanged: (value) {},
+                onChanged: (value) {
+                  rhsBPillar = value;
+                },
                 dropdownItems: airbagCondition),
             CustomDropDown(
                 title: "RHS C Piller ",
-                onChanged: (value) {},
+                onChanged: (value) {
+                  rhsCPillar = value;
+                },
                 dropdownItems: airbagCondition),
             CustomDropDown(
                 title: "Reverse Parking Camera ",
-                onChanged: (value) {},
+                onChanged: (value) {
+                  reverseCamera = value;
+                },
                 dropdownItems: const [
                   "Okay",
                   "Not Applicable",
@@ -114,6 +139,21 @@ class SafetyDetails extends StatelessWidget {
           child: PrimaryButton(
               title: "Next",
               function: () {
+                Provider.of<UploadSafetyDetailsService>(context, listen: false)
+                    .uploadSafetyDetails(
+                  carId: vehicleId,
+                  abs: abs,
+                  coDriverSide: coDriverSide,
+                  driverSide: driverSide,
+                  lhsApillar: lhsAPillar,
+                  lhsBpillar: lhsBPillar,
+                  lhsCpillar: lhsCPillar,
+                  noOfAirbags: noOfAirbags,
+                  reverseParkingCamera: reverseCamera,
+                  rhsApillar: rhsAPillar,
+                  rhsBpillar: rhsBPillar,
+                  rhsCpillar: rhsCPillar,
+                );
                 Provider.of<VehicleInspectionService>(context, listen: false)
                     .increaseIndex();
               },

@@ -17,7 +17,7 @@ import 'basic_document_details/basic_document_details.dart';
 
 class VehicleInspection extends StatefulWidget {
   const VehicleInspection({super.key});
-  static int vehicleId = DateTime.now().millisecondsSinceEpoch;
+  static String vehicleId = DateTime.now().millisecondsSinceEpoch.toString();
   @override
   State<VehicleInspection> createState() => _VehicleInspectionState();
 }
@@ -33,10 +33,18 @@ class _VehicleInspectionState extends State<VehicleInspection> {
     EngineTransmission(
       vehicleId: VehicleInspection.vehicleId,
     ),
-    ElectricalInterior(),
-    ExteriorDetails(),
-    SafetyDetails(),
-    ComfortConveniance()
+    ElectricalInterior(
+      vehicleId: VehicleInspection.vehicleId,
+    ),
+    ExteriorDetails(
+      vehicleId: VehicleInspection.vehicleId,
+    ),
+    SafetyDetails(
+      vehicleId: VehicleInspection.vehicleId,
+    ),
+    ComfortConveniance(
+      vehicleId: VehicleInspection.vehicleId,
+    )
   ];
   @override
   Widget build(BuildContext context) {

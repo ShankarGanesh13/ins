@@ -1,19 +1,12 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flikcar_inspection/models/feature_model.dart';
 import 'package:flutter/material.dart';
 
 class UploadComfortDetailsService extends ChangeNotifier {
-  FilePickerResult? result;
-  String? fileName;
-  bool isLoading = false;
-  File? fileToDisplay;
-  PlatformFile? pickedFile;
-  String sunroofImage1 = "";
-  String sunroofImage2 = "";
-  String optionalComfortImage1 = "";
-  String optionalComfortImage2 = "";
+  List<String> selectedComfortComments = [];
   List<FeatureModel> commentOnComfort = [
     FeatureModel(name: "Electrical Wiring Damaged"),
     FeatureModel(name: "Starter Motor / Solanoid Malfunction"),
@@ -24,95 +17,51 @@ class UploadComfortDetailsService extends ChangeNotifier {
     FeatureModel(name: "Hand Brake not Working"),
   ];
 
-  pickImage({
-    required BuildContext context,
-    required String type,
-  }) async {
-    try {
-      result = await FilePicker.platform.pickFiles(
-        type: FileType.image,
-        allowMultiple: false,
-      );
-      if (result != null) {
-        fileName = result!.files.first.name;
-        pickedFile = result!.files.first;
-        fileToDisplay = File(pickedFile!.path.toString());
-        print(fileToDisplay!.path);
-      }
-    } catch (e) {
-      print(e);
-    }
-
-    if (result != null) {
-      selectImage(imageType: type, imagePath: pickedFile!.path!);
-
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            duration: Duration(seconds: 2),
-            backgroundColor: Color(0xFF45C08D),
-            content: Text("Image Selected"),
-          ),
-        );
-      }
-    }
-    if (result == null) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            duration: Duration(seconds: 2),
-            backgroundColor: Color(0xFF45C08D),
-            content: Text(
-              "No image selected",
-            ),
-          ),
-        );
-      }
+  addComfortComments({required String feature}) {
+    if (selectedComfortComments.contains(feature)) {
+      selectedComfortComments.remove(feature);
+    } else {
+      selectedComfortComments.add(feature);
     }
   }
 
-  selectImage({required String imageType, required String imagePath}) {
-    switch (imageType) {
-      case "sunroofImage1":
-        {
-          sunroofImage1 = imagePath;
-          notifyListeners();
-        }
-      case "sunroofImage2":
-        {
-          sunroofImage2 = imagePath;
-          notifyListeners();
-        }
-      case "optionalComfortImage1":
-        {
-          optionalComfortImage1 = imagePath;
-          notifyListeners();
-        }
-      case "optionalComfortImage2":
-        {
-          optionalComfortImage2 = imagePath;
-          notifyListeners();
-        }
-
-      default:
-        {
-          debugPrint("Invalid choice ");
-        }
-    }
-  }
-
-  uploadComfortDetails() {
+  uploadComfortDetails({
+    required String carId,
+    String? manualAC,
+    String? climateControl,
+    String? musicSystem,
+    String? stereo,
+    String? inbuiltSpeaker,
+    String? externalSpeaker,
+    String? steeringMountedAudioControl,
+    String? sunroof,
+  }) {
     Map<String, dynamic> comfortDetails = {
-      "manualAC": "",
-      "climateControl": "",
-      "musicSystem": "",
-      "stereo": "",
-      "inbuiltSpeaker": "",
-      "externalSpeaker": "",
-      "steeringMountedAudioControl": "",
-      "sunroof": "",
-      "commentsOnComfort": [],
-      "comfortImages": [], //type:OTHER
+      "manualAC": manualAC,
+      "climateControl": climateControl,
+      "musicSystem": musicSystem,
+      "stereo": stereo,
+      "inbuiltSpeaker": inbuiltSpeaker,
+      "externalSpeaker": externalSpeaker,
+      "steeringMountedAudioControl": steeringMountedAudioControl,
+      "sunroof": sunroof,
+      "commentsOnComfort": selectedComfortComments,
+      "comfortImages": [],
     };
+    try {
+      FirebaseFirestore firestore = FirebaseFirestore.instance;
+      DocumentReference docRef = firestore
+          .collection("auction_vehicles")
+          .doc(carId)
+          .collection("inspection")
+          .doc("inspectionData");
+      docRef.update({
+        "comfortDetails": comfortDetails,
+      });
+      return "SUCCESS";
+    } catch (e) {
+      debugPrint("$e");
+      return "ERROR";
+    }
   }
 }

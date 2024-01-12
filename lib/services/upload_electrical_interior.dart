@@ -1,6 +1,8 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flikcar_inspection/models/feature_model.dart';
+import 'package:flikcar_inspection/models/image_model.dart';
 import 'package:flutter/material.dart';
 
 class UploadElectricalInteriorService extends ChangeNotifier {
@@ -36,111 +38,77 @@ class UploadElectricalInteriorService extends ChangeNotifier {
     FeatureModel(name: "Amplifier Retained By the Customer"),
     FeatureModel(name: "Horn Not Working"),
   ];
+  List<String> selectedCommentOnInterior = [];
+  List<String> selectedCommentsonElectrical = [];
 
-  pickImage({
-    required BuildContext context,
-    required String type,
-  }) async {
-    try {
-      result = await FilePicker.platform.pickFiles(
-        type: FileType.image,
-        allowMultiple: false,
-      );
-      if (result != null) {
-        fileName = result!.files.first.name;
-        pickedFile = result!.files.first;
-        fileToDisplay = File(pickedFile!.path.toString());
-        print(fileToDisplay!.path);
+  addCommentsOnEngineTransmission(
+      {required String feature, required String type}) {
+    if (type == "interior") {
+      if (selectedCommentOnInterior.contains(feature)) {
+        selectedCommentOnInterior.remove(feature);
+      } else {
+        selectedCommentOnInterior.add(feature);
       }
-    } catch (e) {
-      print(e);
-    }
-
-    if (result != null) {
-      selectImage(imageType: type, imagePath: pickedFile!.path!);
-
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            duration: Duration(seconds: 2),
-            backgroundColor: Color(0xFF45C08D),
-            content: Text("Image Selected"),
-          ),
-        );
-      }
-    }
-    if (result == null) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            duration: Duration(seconds: 2),
-            backgroundColor: Color(0xFF45C08D),
-            content: Text(
-              "No image selected",
-            ),
-          ),
-        );
+    } else if (type == "electrical") {
+      if (selectedCommentsonElectrical.contains(feature)) {
+        selectedCommentsonElectrical.remove(feature);
+      } else {
+        selectedCommentsonElectrical.add(feature);
       }
     }
   }
 
-  selectImage({required String imageType, required String imagePath}) {
-    switch (imageType) {
-      case "consoleImage":
-        {
-          consoleImage = imagePath;
-          notifyListeners();
-        }
-      case "odometerImage":
-        {
-          odometerImage = imagePath;
-          notifyListeners();
-        }
-      case "leatherSeatImage1":
-        {
-          leatherSeatImage1 = imagePath;
-          notifyListeners();
-        }
-      case "leatherSeatImage2":
-        {
-          leatherSeatImage2 = imagePath;
-          notifyListeners();
-        }
-      case "fabricSeatImage1":
-        {
-          fabricSeatImage1 = imagePath;
-          notifyListeners();
-        }
-      case "fabricSeatImage2":
-        {
-          fabricSeatImage2 = imagePath;
-          notifyListeners();
-        }
-
-      default:
-        {
-          debugPrint("Invalid choice ");
-        }
-    }
-  }
-
-  uploadElectricalInteriorDetails() {
+  uploadElectricalInteriorDetails({
+    required String carId,
+    String? fabricSeats,
+    String? fuelLevel,
+    required List<ImageModel> interiorImages,
+    String? lhsFrontPowerWindow,
+    String? lhsRearPowerWindow,
+    String? leatherSeats,
+    String? odometerReading,
+    String? powerWindow,
+    String? rearDefogger,
+    String? rearWiper,
+    String? rhsFrontPowerWindow,
+    String? rhsRearPowerWindow,
+    String? electricals,
+  }) {
+    List<Map<String, String>> imageList = interiorImages
+        .map((image) => Map<String, String>.from(image.toJson()))
+        .toList();
     Map<String, dynamic> electicalInteriorDetails = {
-      "odometerReading": "",
-      "fuelLevel": "",
-      "electricals": "",
-      "rearWiper": "",
-      "rearDefogger": "",
-      "powerWindow": "",
-      "rhsFrontPowerWindow": "",
-      "lhsFrontPowerWindow": "",
-      "lhsRearPowerWindow": "",
-      "rhsRearPowerWindow": "",
-      "leatherSeats": "",
-      "fabricSeats": "",
-      "commentsOnElectrical": "",
-      "commentsOnInterior": "",
-      "interiorImages": [], // type: INT
+      "commentsOnElectrical": selectedCommentsonElectrical,
+      "commentsOnInterior": selectedCommentOnInterior,
+      "fabricSeats": fabricSeats,
+      "fuelLevel": fuelLevel,
+      "interiorImages": imageList,
+      "lhsFrontPowerWindow": lhsFrontPowerWindow,
+      "lhsRearPowerWindow": lhsRearPowerWindow,
+      "leatherSeats": leatherSeats,
+      "odometerReading": odometerReading,
+      "powerWindow": powerWindow,
+      "rearDefogger": rearDefogger,
+      "rearWiper": rearWiper,
+      "rhsFrontPowerWindow": rhsFrontPowerWindow,
+      "rhsRearPowerWindow": rhsRearPowerWindow,
+      "electricals": electricals,
     };
+
+    try {
+      FirebaseFirestore firestore = FirebaseFirestore.instance;
+      DocumentReference docRef = firestore
+          .collection("auction_vehicles")
+          .doc(carId)
+          .collection("inspection")
+          .doc("inspectionData");
+      docRef.update({
+        "electicalInteriorDetails": electicalInteriorDetails,
+      });
+      return "SUCCESS";
+    } catch (e) {
+      debugPrint("$e");
+      return "ERROR";
+    }
   }
 }

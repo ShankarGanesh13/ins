@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 
 class ImageSource extends StatelessWidget {
   final Function() galleryFunction;
+  final Function() cameraFunction;
 
-  const ImageSource({super.key, required this.galleryFunction});
+  const ImageSource(
+      {super.key, required this.galleryFunction, required this.cameraFunction});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +27,7 @@ class ImageSource extends StatelessWidget {
                 fontWeight: FontWeight.w600,
               ),
             ),
-            Divider(),
+            const Divider(),
             const SizedBox(
               height: 5,
             ),
@@ -34,8 +36,10 @@ class ImageSource extends StatelessWidget {
               children: [
                 GestureDetector(
                   onTap: () async {
-                    UploadImagesService()
-                        .selectImageFromCamera(context: context);
+                    cameraFunction();
+                    debugPrint("pick image from camera");
+                    // UploadImagesService()
+                    //     .selectImageFromCamera(context: context);
 
                     // imagePath = await selectImageFromCamera();
                     // if (imagePath != "") {
@@ -74,6 +78,7 @@ class ImageSource extends StatelessWidget {
                   onTap: () {
                     //  UploadImages().selectImageFromGallery(context: context);
                     galleryFunction();
+                    debugPrint("pick image from gallery");
                   },
                   child: const Column(
                     children: [
@@ -85,30 +90,30 @@ class ImageSource extends StatelessWidget {
                     ],
                   ),
                 ),
-                const SizedBox(
-                  height: 30,
-                  width: 3,
-                  child: VerticalDivider(
-                    color: Colors.black,
-                    thickness: 1,
-                    width: 10,
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {},
-                  child: const Column(
-                    children: [
-                      Icon(
-                        Icons.edit,
-                        size: 30,
-                      ),
-                      Text(
-                        "Edit",
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                )
+                // const SizedBox(
+                //   height: 30,
+                //   width: 3,
+                //   child: VerticalDivider(
+                //     color: Colors.black,
+                //     thickness: 1,
+                //     width: 10,
+                //   ),
+                // ),
+                // GestureDetector(
+                //   onTap: () {},
+                //   child: const Column(
+                //     children: [
+                //       Icon(
+                //         Icons.edit,
+                //         size: 30,
+                //       ),
+                //       Text(
+                //         "Edit",
+                //         textAlign: TextAlign.center,
+                //       ),
+                //     ],
+                //   ),
+                // )
               ],
             ),
             const SizedBox(

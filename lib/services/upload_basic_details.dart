@@ -1,13 +1,20 @@
 import 'dart:io';
 
+import 'dart:typed_data';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flikcar_inspection/models/feature_model.dart';
+import 'package:flikcar_inspection/models/image_model.dart';
 import 'package:flikcar_inspection/services/get_basic_details.dart';
 import 'package:flikcar_inspection/services/upload_images.dart';
 import 'package:flikcar_inspection/services/vehicle_inspection_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 class UploadBasicDetailsService extends ChangeNotifier {
   FilePickerResult? result;
@@ -73,39 +80,284 @@ class UploadBasicDetailsService extends ChangeNotifier {
     notifyListeners();
   }
 
-  pickImage({
-    required BuildContext context,
-    required String type,
-  }) async {
+  selectImageGallery(
+      {required String imageType, required BuildContext context}) async {
+    switch (imageType) {
+      case "rc":
+        {
+          pickImageGallery(
+              context: context,
+              type: imageType,
+              images: rcImages,
+              multipleSelect: true);
+
+          notifyListeners();
+        }
+        break;
+      case "chassis":
+        {
+          pickImageGallery(
+              context: context,
+              type: imageType,
+              images: chassisImages,
+              multipleSelect: true);
+          notifyListeners();
+        }
+        break;
+      case "hypothecation":
+        {
+          pickImageGallery(
+              context: context,
+              type: imageType,
+              images: hypothecationImages,
+              multipleSelect: true);
+          notifyListeners();
+        }
+        break;
+
+      case "roadtax":
+        {
+          pickImageGallery(
+              context: context,
+              type: imageType,
+              images: roadTaxImages,
+              multipleSelect: true);
+          notifyListeners();
+        }
+        break;
+      case "duplicateKeyImage":
+        {
+          pickImageGallery(
+              context: context,
+              type: imageType,
+              images: duplicateKeyImages,
+              multipleSelect: true);
+          notifyListeners();
+        }
+        break;
+
+      case "insurance":
+        {
+          pickImageGallery(
+              context: context,
+              type: imageType,
+              images: insuranceImages,
+              multipleSelect: true);
+
+          notifyListeners();
+        }
+        break;
+
+      case "rtoNoc":
+        {
+          pickImageGallery(
+              context: context,
+              type: imageType,
+              images: rtoNocImages,
+              multipleSelect: true);
+          notifyListeners();
+        }
+        break;
+
+      default:
+        {
+          debugPrint("Invalid choice of basic details");
+        }
+    }
+  }
+
+  selectImageCamera(
+      {required String imageType, required BuildContext context}) async {
+    switch (imageType) {
+      case "rc":
+        {
+          pickImageCamera(
+            context: context,
+            type: imageType,
+            images: rcImages,
+          );
+
+          notifyListeners();
+        }
+        break;
+      case "chassis":
+        {
+          // chassisImages = await UploadImagesService()
+          //     .selectImageFromGallery(context: context);
+          pickImageCamera(
+            context: context,
+            type: imageType,
+            images: chassisImages,
+          );
+          notifyListeners();
+        }
+        break;
+      case "hypothecation":
+        {
+          // hypothecationImages = await UploadImagesService()
+          //     .selectImageFromGallery(context: context);
+          pickImageCamera(
+            context: context,
+            type: imageType,
+            images: hypothecationImages,
+          );
+          notifyListeners();
+        }
+        break;
+
+      case "roadtax":
+        {
+          // roadTaxImages = await UploadImagesService()
+          //     .selectImageFromGallery(context: context);
+          pickImageCamera(
+            context: context,
+            type: imageType,
+            images: roadTaxImages,
+          );
+          notifyListeners();
+        }
+        break;
+      case "duplicateKeyImage":
+        {
+          // duplicateKeyImages = await UploadImagesService()
+          //     .selectImageFromGallery(context: context);
+          pickImageCamera(
+            context: context,
+            type: imageType,
+            images: duplicateKeyImages,
+          );
+          notifyListeners();
+        }
+        break;
+
+      case "insurance":
+        {
+          // insuranceImages = await UploadImagesService()
+          //     .selectImageFromGallery(context: context);
+          pickImageCamera(
+            context: context,
+            type: imageType,
+            images: insuranceImages,
+          );
+
+          notifyListeners();
+        }
+        break;
+
+      case "rtoNoc":
+        {
+          // rtoNocImages = await UploadImagesService()
+          //     .selectImageFromGallery(context: context);
+          pickImageCamera(
+            context: context,
+            type: imageType,
+            images: rtoNocImages,
+          );
+          notifyListeners();
+        }
+        break;
+
+      default:
+        {
+          debugPrint("Invalid choice of basic details");
+        }
+    }
+  }
+
+  removeImage(
+      {required String imageType,
+      required BuildContext context,
+      required String image}) async {
+    switch (imageType) {
+      case "rc":
+        {
+          rcImages.remove(image);
+
+          notifyListeners();
+        }
+        break;
+      case "chassis":
+        {
+          chassisImages.remove(image);
+          notifyListeners();
+        }
+        break;
+      case "hypothecation":
+        {
+          hypothecationImages.remove(image);
+          notifyListeners();
+        }
+        break;
+
+      case "roadtax":
+        {
+          roadTaxImages.remove(image);
+          notifyListeners();
+        }
+        break;
+      case "duplicateKeyImage":
+        {
+          duplicateKeyImages.remove(image);
+          notifyListeners();
+        }
+        break;
+
+      case "insurance":
+        {
+          insuranceImages.remove(image);
+
+          notifyListeners();
+        }
+        break;
+
+      case "rtoNoc":
+        {
+          rtoNocImages.remove(image);
+          notifyListeners();
+        }
+        break;
+
+      default:
+        {
+          debugPrint("Invalid choice of basic details");
+        }
+    }
+  }
+
+  pickImageCamera(
+      {required BuildContext context,
+      required String type,
+      required List<String> images}) async {
+    List<File> displayFiles = [];
     try {
-      result = await FilePicker.platform.pickFiles(
-        type: FileType.image,
-        allowMultiple: false,
-      );
-      if (result != null) {
-        fileName = result!.files.first.name;
-        pickedFile = result!.files.first;
-        fileToDisplay = File(pickedFile!.path.toString());
-        print(fileToDisplay!.path);
+      // result = await FilePicker.platform.pickFiles(
+      //   type: FileType.image,
+      //   allowMultiple: multipleSelect,
+      // );
+      XFile? file = await ImagePicker()
+          .pickImage(source: ImageSource.camera, imageQuality: 60);
+      if (file != null) {
+        displayFiles.add(File(file.path.toString()));
+
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              duration: Duration(seconds: 5),
+              backgroundColor: Color(0xFF45C08D),
+              content: Text("Image Uploading, Please wait"),
+            ),
+          );
+        }
+        images.addAll(
+            await uploadImagesToFirestore(files: displayFiles, type: ""));
+
+        notifyListeners();
       }
     } catch (e) {
       print(e);
     }
 
-    if (result != null) {
-      //   selectImage(imageType: type, imagePath: pickedFile!.path!);
-
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            duration: Duration(seconds: 2),
-            backgroundColor: Color(0xFF45C08D),
-            content: Text("Image Selected"),
-          ),
-        );
-      }
-    }
-    if (result == null) {
+    if (images.isEmpty) {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -120,72 +372,91 @@ class UploadBasicDetailsService extends ChangeNotifier {
     }
   }
 
-  getCustomerContactNumber({required String phoneNumber}) {}
+  Future<List<String>> uploadImagesToFirestore(
+      {required List<File> files, required String type}) async {
+    final storage = FirebaseStorage.instance;
+    List<String> imageUrls = [];
 
-  selectImage(
-      {required String imageType, required BuildContext context}) async {
-    switch (imageType) {
-      case "rc":
-        {
-          rcImages = await UploadImagesService()
-              .selectImageFromGallery(context: context);
-          debugPrint("rc images $rcImages");
-          notifyListeners();
-        }
-        break;
-      case "chassis":
-        {
-          chassisImages = await UploadImagesService()
-              .selectImageFromGallery(context: context);
+    for (var file in files) {
+      try {
+        // Compress the image before uploading
+        List<int> compressedBytes = await FlutterImageCompress.compressWithList(
+          file.readAsBytesSync(),
+          minHeight: 800,
+          minWidth: 600,
+          quality: 65,
+        );
 
-          notifyListeners();
-        }
-        break;
-      case "hypothecation":
-        {
-          hypothecationImages = await UploadImagesService()
-              .selectImageFromGallery(context: context);
-          notifyListeners();
-        }
-        break;
+        // Convert List<int> to Uint8List
+        Uint8List compressedUint8List = Uint8List.fromList(compressedBytes);
 
-      case "roadtax":
-        {
-          roadTaxImages = await UploadImagesService()
-              .selectImageFromGallery(context: context);
+        String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+        Reference storageReference = storage.ref().child('$fileName.jpg');
 
-          notifyListeners();
-        }
-        break;
-      case "duplicateKeyImage":
-        {
-          duplicateKeyImages = await UploadImagesService()
-              .selectImageFromGallery(context: context);
-          notifyListeners();
-        }
-        break;
+        // Upload the compressed image
+        UploadTask uploadTask = storageReference.putData(compressedUint8List);
 
-      case "insurance":
-        {
-          insuranceImages = await UploadImagesService()
-              .selectImageFromGallery(context: context);
+        TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() => null);
 
-          notifyListeners();
-        }
-        break;
+        String downloadUrl = await taskSnapshot.ref.getDownloadURL();
+        imageUrls.add(downloadUrl);
 
-      case "rtoNoc":
-        {
-          rtoNocImages = await UploadImagesService()
-              .selectImageFromGallery(context: context);
-          notifyListeners();
-        }
-        break;
+        print("***********$imageUrls");
+      } catch (e) {
+        print('Error uploading image: $e');
+        // Handle errors if needed
+      }
+    }
 
-      default:
-        {
-          debugPrint("Invalid choice of basic details");
+    return imageUrls;
+  }
+
+  pickImageGallery(
+      {required BuildContext context,
+      required bool multipleSelect,
+      required String type,
+      required List<String> images}) async {
+    List<XFile>? files = await ImagePicker().pickMultiImage(imageQuality: 60);
+    List<File> displayFiles = [];
+    try {
+      // result = await FilePicker.platform.pickFiles(
+      //   type: FileType.image,
+      //   allowMultiple: multipleSelect,
+      // );
+      if (files.isNotEmpty) {
+        files.forEach((element) {
+          displayFiles.add(File(element.path.toString()));
+        });
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              duration: Duration(seconds: 5),
+              backgroundColor: Color(0xFF45C08D),
+              content: Text("Image Uploading, Please wait"),
+            ),
+          );
         }
+        images.addAll(
+            await uploadImagesToFirestore(files: displayFiles, type: type));
+
+        notifyListeners();
+      }
+    } catch (e) {
+      print(e);
+    }
+
+    if (images.isEmpty) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            duration: Duration(seconds: 2),
+            backgroundColor: Color(0xFF45C08D),
+            content: Text(
+              "No image selected",
+            ),
+          ),
+        );
+      }
     }
   }
 
@@ -255,6 +526,8 @@ class UploadBasicDetailsService extends ChangeNotifier {
   }
 
   String uploadBasicDocuments({
+    required String carId,
+    required int customerExpectedPrice,
     String? appointmentId,
     String? custContactNo,
     String? city,
@@ -306,7 +579,7 @@ class UploadBasicDetailsService extends ChangeNotifier {
     String? thumbnailImage,
   }) {
     Map<String, dynamic> basicDocuments = {
-      "appointmentId": appointmentId,
+      "appointmentId": DateTime.now().millisecondsSinceEpoch,
       "custContactNo": custContactNo,
 
       "regType": regType,
@@ -348,9 +621,9 @@ class UploadBasicDetailsService extends ChangeNotifier {
       //
       "imagePath": thumbnailImage,
       //
-      "id": "",
-      "carPrice": "",
-      "city": city,
+      "id": carId,
+      "carPrice": customerExpectedPrice,
+      "city": "Kolkata",
       "roadTaxValidity": roadTaxValidity,
       "insuranceValidity": insuranceValidity,
       "comfort": selectedComfort,
@@ -382,15 +655,16 @@ class UploadBasicDetailsService extends ChangeNotifier {
     };
     try {
       FirebaseFirestore firestore = FirebaseFirestore.instance;
-      CollectionReference collection = firestore
-          .collection("test_auctionVehicle")
-          .doc(DateTime.now().millisecondsSinceEpoch.toString())
-          .collection("inspection");
-      collection.add({
-        "basicDocumentDetails": basicDocuments,
-        "vehicleId": "",
+      DocumentReference docRef = firestore
+          .collection("auction_vehicles")
+          .doc(carId)
+          .collection("inspection")
+          .doc("inspectionData");
+      docRef.set({
+        "basicDocuments": basicDocuments,
+        "vehicleId": carId,
         "createdAt": DateTime.now().millisecondsSinceEpoch,
-        "inspectorId": "",
+        "inspectorId": "2",
         "pdfUrl": null,
       });
       return "SUCCESS";
@@ -413,6 +687,8 @@ class UploadBasicDetailsService extends ChangeNotifier {
     int? seat,
     String? transmission,
     String? variant,
+    String? thumbnail,
+    required String carId,
   }) {
     Map<String, dynamic> auctionData = {
       "carDetails": {
@@ -421,9 +697,8 @@ class UploadBasicDetailsService extends ChangeNotifier {
         "city": city,
         "color": color,
         "fuelType": fuelType,
-        "id": "${VehicleInspectionService().getVehicleId()}",
-        "imagePath":
-            "https://storage.googleapis.com/flikcar-bac6e.appspot.com/1703576357762_dibya-car.jpg?GoogleAccessId=firebase-adminsdk-xfv8a%40flikcar-bac6e.iam.gserviceaccount.com&Expires=4102425000&Signature=xDf9sDx8Oxxe57es0YGalEB8yKQ3O1bP%2F20JgGO5GdJj8cq0yV291qoKSXaXpoE8Aj5uAWcboma1xSfJfLTHv4h45W0Jk%2Fskw26wcSvHORztJ1qidks0eYaFV8vDZL8k7IBrI%2Bp6zc7M0UuHI9e%2FZrm4TwIxz0NStk%2BX30GzWZfBAbILGrOi1cxXyZg%2FJCymFMExgTmrN%2FuGeoSrlFnw%2BFa1MOyQE6Rev02M7Tj0A8hVBLgNfLv%2BA6OzwzaNksmTUN3ly8jgrpn6qAchLH6D%2FAUD7sU5gxazVjT3ObiF2gkEFr3C1kUhLABIHrteNG34xH2Zo7pvuAx%2BXXm5nGfqDw%3D%3D",
+        "id": carId,
+        "imagePath": thumbnail,
         "kmsDriven": kmsDriven,
         "model": model,
         "ownerType": ownerType,
@@ -433,7 +708,7 @@ class UploadBasicDetailsService extends ChangeNotifier {
         "variant": variant
       },
       "endTime": 1704431104243,
-      "id": "${VehicleInspectionService().getVehicleId()}",
+      "id": carId,
       "isSoldOut": false,
       "latestBid": null,
       "oneClickBuyPrice": null,
@@ -443,7 +718,7 @@ class UploadBasicDetailsService extends ChangeNotifier {
     try {
       FirebaseFirestore firestore = FirebaseFirestore.instance;
       DocumentReference documentReference =
-          firestore.collection("testing_auction").doc("001");
+          firestore.collection("auctions").doc(carId);
 
       documentReference.set(auctionData);
       return "SUCCESS";
@@ -484,10 +759,11 @@ class UploadBasicDetailsService extends ChangeNotifier {
     int? seat,
     String? transmission,
     String? variant,
+    required String carId,
   }) {
     Map<String, dynamic> auctionVehicleData = {
       "carPrice": carPrice,
-      "id": "${VehicleInspectionService().getVehicleId()}",
+      "id": carId,
       "images": [],
       "pdfUrl": null,
       "properties": {
@@ -524,66 +800,80 @@ class UploadBasicDetailsService extends ChangeNotifier {
       "status": "ACTIVE",
       "uploadedAt": DateTime.now().millisecondsSinceEpoch,
       "uploadedBy": "Inspection app",
-      "videos": []
+      "videos": [],
     };
+    try {
+      FirebaseFirestore firestore = FirebaseFirestore.instance;
+      DocumentReference documentReference =
+          firestore.collection("auction_vehicles").doc(carId);
+
+      documentReference.set(auctionVehicleData);
+      return "SUCCESS";
+    } catch (e) {
+      debugPrint("$e");
+      return "ERROR";
+    }
   }
 
-  uploadData({
-    String? appointmentId,
-    String? custContactNo,
-    String? city,
-    String? regType,
-    String? regNo,
-    String? rcAvailablilty,
-    String? rcCondition,
-    String? regDate,
-    String? fittnessUpto,
-    String? tobeScraped,
-    String? regState,
-    String? rtoLocation,
-    String? ownerSerialNo,
-    String? brand,
-    String? model,
-    String? variant,
-    String? engineNo,
-    String? chassisNo,
-    String? regOwnerName,
-    String? mfgMonth,
-    int? manufacturingYear,
-    String? fuelType,
-    int? cc,
-    String? hypoDetails,
-    int? seat,
-    String? missmatchRC,
-    int? roadTaxValidity,
-    String? roadTax,
-    String? insurance,
-    int? insuranceValidity,
-    String? noClaimBonus,
-    String? missmatchInsurance,
-    String? duplicateKey,
-    String? rtoNoc,
-    int? rtoNocIssueDate,
-    int? registrationYear,
-    String? bodyType,
-    String? transmission,
-    String? ownerType,
-    String? color,
-    int? kmsDriven,
-    String? carDescription,
-    String? mileage,
-    String? maxPower,
-    String? maxTorque,
-    String? inspectionReport,
-    int? inspectionScore,
-    String? imagePath,
-    String? noc,
-  }) {
+  uploadData(
+      {String? appointmentId,
+      String? custContactNo,
+      required int customerExpectedPrice,
+      String? city,
+      String? regType,
+      String? regNo,
+      String? rcAvailablilty,
+      String? rcCondition,
+      String? regDate,
+      String? fittnessUpto,
+      String? tobeScraped,
+      String? regState,
+      String? rtoLocation,
+      String? ownerSerialNo,
+      String? brand,
+      String? model,
+      String? variant,
+      String? engineNo,
+      String? chassisNo,
+      String? regOwnerName,
+      String? mfgMonth,
+      int? manufacturingYear,
+      String? fuelType,
+      int? cc,
+      String? hypoDetails,
+      int? seat,
+      String? missmatchRC,
+      int? roadTaxValidity,
+      String? roadTax,
+      String? insurance,
+      int? insuranceValidity,
+      String? noClaimBonus,
+      String? missmatchInsurance,
+      String? duplicateKey,
+      String? rtoNoc,
+      int? rtoNocIssueDate,
+      int? registrationYear,
+      String? bodyType,
+      String? transmission,
+      String? ownerType,
+      String? color,
+      int? kmsDriven,
+      String? carDescription,
+      String? mileage,
+      String? maxPower,
+      String? maxTorque,
+      String? inspectionReport,
+      int? inspectionScore,
+      String? noc,
+      required String thumbnail,
+      required String carId}) {
     uploadBasicDocuments(
+      carId: carId,
       appointmentId: appointmentId,
       bodyType: bodyType,
       brand: brand,
       carDescription: carDescription,
+      customerExpectedPrice: customerExpectedPrice,
       cc: cc,
       chassisNo: chassisNo,
       city: city,
@@ -628,11 +918,13 @@ class UploadBasicDetailsService extends ChangeNotifier {
       tobeScraped: tobeScraped,
       transmission: transmission,
       variant: variant,
+      thumbnailImage: thumbnail,
     );
     addAuctionData(
       bodyType: bodyType,
       brand: brand,
       city: city,
+      carId: carId,
       color: color,
       fuelType: fuelType,
       kmsDriven: kmsDriven,
@@ -642,12 +934,14 @@ class UploadBasicDetailsService extends ChangeNotifier {
       seat: seat,
       transmission: transmission,
       variant: variant,
+      thumbnail: thumbnail,
     );
     addAuctionVehicleData(
+      carId: carId,
       bodyType: bodyType,
       brand: brand,
       carDescription: carDescription,
-      carPrice: 0,
+      carPrice: customerExpectedPrice,
       city: city,
       color: color,
       engineCC: cc,
@@ -670,5 +964,31 @@ class UploadBasicDetailsService extends ChangeNotifier {
       transmission: transmission,
       variant: variant,
     );
+  }
+
+  clearImages() {
+    commentsOnBasic = [];
+    comfort = [];
+    safety = [];
+    interior = [];
+    exterior = [];
+    entertainment = [];
+    rcImages = [];
+    chassisImages = [];
+
+    hypothecationImages = [];
+
+    roadTaxImages = [];
+    insuranceImages = [];
+
+    duplicateKeyImages = [];
+    rtoNocImages = [];
+    selectedComfort = [];
+    selectedSafety = [];
+    selectedInterior = [];
+    selectedExterior = [];
+    selectedEntertainment = [];
+    selectedCommentOnBasicDetails = [];
+    notifyListeners();
   }
 }

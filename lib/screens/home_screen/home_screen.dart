@@ -49,86 +49,86 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
           const Divider(),
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => UpcomingInspection()));
-            },
-            child: Container(
-              color: Colors.white,
-              padding: const EdgeInsets.all(15),
-              child: Row(children: [
-                Image.asset(
-                  "assets/app_icons/upcoming_inspection.png",
-                  height: 24,
-                  width: 24,
-                ),
-                const SizedBox(
-                  width: 15,
-                ),
-                Text(
-                  "Upcoming Inspection",
-                  style: AppFonts.w500blue18,
-                )
-              ]),
-            ),
-          ),
-          const Divider(),
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => CompletedInspection()));
-            },
-            child: Container(
-              padding: const EdgeInsets.all(15),
-              color: Colors.white,
-              child: Row(children: [
-                Image.asset(
-                  "assets/app_icons/inspection_complete.png",
-                  height: 24,
-                  width: 24,
-                ),
-                const SizedBox(
-                  width: 15,
-                ),
-                Text(
-                  "Completed Inspection",
-                  style: AppFonts.w500blue18,
-                )
-              ]),
-            ),
-          ),
-          const Divider(),
-          GestureDetector(
-            onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => ProfileScreen()));
-            },
-            child: Container(
-              color: Colors.white,
-              padding: const EdgeInsets.all(15),
-              child: Row(children: [
-                Image.asset(
-                  "assets/app_icons/profile_icon.png",
-                  height: 24,
-                  width: 24,
-                  color: Color(0xff161F31),
-                ),
-                const SizedBox(
-                  width: 15,
-                ),
-                Text(
-                  "Profile",
-                  style: AppFonts.w500blue18,
-                )
-              ]),
-            ),
-          ),
-          const Divider()
+          // GestureDetector(
+          //   onTap: () {
+          //     Navigator.push(
+          //         context,
+          //         MaterialPageRoute(
+          //             builder: (context) => UpcomingInspection()));
+          //   },
+          //   child: Container(
+          //     color: Colors.white,
+          //     padding: const EdgeInsets.all(15),
+          //     child: Row(children: [
+          //       Image.asset(
+          //         "assets/app_icons/upcoming_inspection.png",
+          //         height: 24,
+          //         width: 24,
+          //       ),
+          //       const SizedBox(
+          //         width: 15,
+          //       ),
+          //       Text(
+          //         "Upcoming Inspection",
+          //         style: AppFonts.w500blue18,
+          //       )
+          //     ]),
+          //   ),
+          // ),
+          // const Divider(),
+          // GestureDetector(
+          //   onTap: () {
+          //     Navigator.push(
+          //         context,
+          //         MaterialPageRoute(
+          //             builder: (context) => CompletedInspection()));
+          //   },
+          //   child: Container(
+          //     padding: const EdgeInsets.all(15),
+          //     color: Colors.white,
+          //     child: Row(children: [
+          //       Image.asset(
+          //         "assets/app_icons/inspection_complete.png",
+          //         height: 24,
+          //         width: 24,
+          //       ),
+          //       const SizedBox(
+          //         width: 15,
+          //       ),
+          //       Text(
+          //         "Completed Inspection",
+          //         style: AppFonts.w500blue18,
+          //       )
+          //     ]),
+          //   ),
+          // ),
+          // const Divider(),
+          // GestureDetector(
+          //   onTap: () {
+          //     Navigator.push(context,
+          //         MaterialPageRoute(builder: (context) => ProfileScreen()));
+          //   },
+          //   child: Container(
+          //     color: Colors.white,
+          //     padding: const EdgeInsets.all(15),
+          //     child: Row(children: [
+          //       Image.asset(
+          //         "assets/app_icons/profile_icon.png",
+          //         height: 24,
+          //         width: 24,
+          //         color: Color(0xff161F31),
+          //       ),
+          //       const SizedBox(
+          //         width: 15,
+          //       ),
+          //       Text(
+          //         "Profile",
+          //         style: AppFonts.w500blue18,
+          //       )
+          //     ]),
+          //   ),
+          // ),
+          // const Divider()
         ],
       ),
     );

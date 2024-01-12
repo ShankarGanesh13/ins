@@ -1,25 +1,14 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flikcar_inspection/models/feature_model.dart';
+import 'package:flikcar_inspection/models/image_model.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 
 class EngineTransmissonService extends ChangeNotifier {
-  FilePickerResult? result;
-  String? fileName;
-  bool isLoading = false;
-  File? fileToDisplay;
-  PlatformFile? pickedFile;
-  String? thumbnailPath;
-  String engineBayImage = "";
-  String engineImage1 = "";
-  String engineImage2 = "";
-  String batteryImage = "";
-  String engineOilDipstickImage = "";
-  String engineThumbnail = "";
-  String exhaustSmokeThumbnail = "";
   List<FeatureModel> commentsOnTransmission = [
     FeatureModel(
         name:
@@ -41,208 +30,80 @@ class EngineTransmissonService extends ChangeNotifier {
     FeatureModel(name: "Minor Noise"),
     FeatureModel(name: "Major Noise"),
   ];
+  List<String> selectedTransmissionComments = [];
+  List<String> selectedEngineComments = [];
 
-  pickImage({
-    required BuildContext context,
-    required String type,
-  }) async {
-    try {
-      result = await FilePicker.platform.pickFiles(
-        type: FileType.image,
-        allowMultiple: false,
-      );
-      if (result != null) {
-        fileName = result!.files.first.name;
-        pickedFile = result!.files.first;
-        fileToDisplay = File(pickedFile!.path.toString());
-        print(fileToDisplay!.path);
+  addCommentsOnEngineTransmission(
+      {required String feature, required String type}) {
+    if (type == "engine") {
+      if (selectedEngineComments.contains(feature)) {
+        selectedEngineComments.remove(feature);
+      } else {
+        selectedEngineComments.add(feature);
       }
-    } catch (e) {
-      print(e);
-    }
-
-    if (result != null) {
-      selectImage(imageType: type, imagePath: pickedFile!.path!);
-
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            duration: Duration(seconds: 2),
-            backgroundColor: Color(0xFF45C08D),
-            content: Text("Image Selected"),
-          ),
-        );
-      }
-    }
-    if (result == null) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            duration: Duration(seconds: 2),
-            backgroundColor: Color(0xFF45C08D),
-            content: Text(
-              "No image selected",
-            ),
-          ),
-        );
+    } else if (type == "transmission") {
+      if (selectedTransmissionComments.contains(feature)) {
+        selectedTransmissionComments.remove(feature);
+      } else {
+        selectedTransmissionComments.add(feature);
       }
     }
   }
 
-  pickVideo({
-    required BuildContext context,
-    required String type,
-  }) async {
-    try {
-      result = await FilePicker.platform.pickFiles(
-        type: FileType.video,
-        allowMultiple: false,
-      );
-
-      if (result != null) {
-        fileName = result!.files.first.name;
-        pickedFile = result!.files.first;
-        fileToDisplay = File(pickedFile!.path.toString());
-        print(fileToDisplay!.path);
-
-        // Check the duration of the selected video
-        final videoFile = File(pickedFile!.path.toString());
-        final videoDuration = await getVideoDuration(videoFile);
-
-        if (videoDuration <= const Duration(seconds: 31)) {
-          thumbnailPath = await VideoThumbnail.thumbnailFile(
-            video: videoFile.path,
-            imageFormat: ImageFormat.JPEG,
-            quality: 50,
-          );
-          selectImage(imageType: type, imagePath: thumbnailPath!);
-          notifyListeners();
-
-          if (context.mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                duration: Duration(seconds: 2),
-                backgroundColor: Color(0xFF45C08D),
-                content: Text("Video Selected"),
-              ),
-            );
-          }
-        } else {
-          if (context.mounted) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                duration: Duration(seconds: 2),
-                backgroundColor: Colors.red,
-                content: Text(
-                  "Selected video is too long (max 30 seconds)",
-                ),
-              ),
-            );
-          }
-        }
-      }
-    } catch (e) {
-      print(e);
-    }
-
-    if (result == null) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            duration: Duration(seconds: 2),
-            backgroundColor: Color(0xFF45C08D),
-            content: Text(
-              "No video selected",
-            ),
-          ),
-        );
-      }
-    }
-  }
-
-  Future<Duration> getVideoDuration(File videoFile) async {
-    final videoPlayerController = VideoPlayerController.file(videoFile);
-    await videoPlayerController.initialize();
-    final duration = videoPlayerController.value.duration;
-    await videoPlayerController.dispose();
-    return duration;
-  }
-
-  selectImage({required String imageType, required String imagePath}) {
-    switch (imageType) {
-      case "engineBay":
-        {
-          engineBayImage = imagePath;
-          notifyListeners();
-        }
-      case "engineImage1":
-        {
-          engineImage1 = imagePath;
-          notifyListeners();
-        }
-      case "engineImage2":
-        {
-          engineImage2 = imagePath;
-          notifyListeners();
-        }
-      case "batteryImage":
-        {
-          batteryImage = imagePath;
-          notifyListeners();
-        }
-      case "engineOilDipstickImage":
-        {
-          engineOilDipstickImage = imagePath;
-          notifyListeners();
-        }
-      case "engineThumbnail":
-        {
-          engineThumbnail = imagePath;
-          notifyListeners();
-        }
-      case "exhaustSmokeThumbnail":
-        {
-          exhaustSmokeThumbnail = imagePath;
-          notifyListeners();
-        }
-      default:
-        {
-          debugPrint("Invalid choice ");
-        }
-    }
-  }
-
-  uploadEngineAndTransmissionDetails() {
+  uploadEngineAndTransmissionDetails({
+    required String carId,
+    required List<ImageModel> engineImages,
+    String? battery,
+    String? brake,
+    String? clutch,
+    String? coolant,
+    String? engine,
+    String? engineBlow,
+    String? engineMount,
+    String? engineOil,
+    String? engineOilDipstick,
+    String? exhaustSmoke,
+    String? gear,
+    String? radiator,
+    String? steering,
+    String? suspension,
+  }) {
+    List<Map<String, String>> imageList = engineImages
+        .map((image) => Map<String, String>.from(image.toJson()))
+        .toList();
     Map<String, dynamic> engineAndTransmissionDetails = {
-      "engine": "",
-      "battery": "",
-      "coolant": "",
-      "engineOilDipstick": "",
-      "engineOil": "",
-      "engineMount": "",
-      "engineBlow": "",
-      "exhaustSmoke": "",
-      "radiator": "",
-      "videos": [
-        {
-          "path": "",
-          "thumb": "",
-          "type": "ENGINE",
-        },
-        {
-          "path": "",
-          "thumb": "",
-          "type": "SILENCER",
-        },
-      ],
-      "engineImages": [],
-      "commentsOnEngine": [],
-      "clutch": "",
-      "gear": "",
-      "steering": "",
-      "brake": "",
-      "suspension": "",
-      "commentsOnTransmission": []
+      "battery": battery,
+      "brake": brake,
+      "clutch": clutch,
+      "commentsOnEngine": selectedEngineComments,
+      "commentsOnTransmission": selectedTransmissionComments,
+      "coolant": coolant,
+      "engine": engine,
+      "engineBlow": engineBlow,
+      "engineImages": imageList,
+      "engineMount": engineMount,
+      "engineOil": engineOil,
+      "engineOilDipstick": engineOilDipstick,
+      "exhaustSmoke": exhaustSmoke,
+      "gear": gear,
+      "radiator": radiator,
+      "steering": steering,
+      "suspension": suspension,
     };
+    try {
+      FirebaseFirestore firestore = FirebaseFirestore.instance;
+      DocumentReference docRef = firestore
+          .collection("auction_vehicles")
+          .doc(carId)
+          .collection("inspection")
+          .doc("inspectionData");
+      docRef.update({
+        "engineAndTransmissionDetails": engineAndTransmissionDetails,
+      });
+      return "SUCCESS";
+    } catch (e) {
+      debugPrint("$e");
+      return "ERROR";
+    }
   }
 }

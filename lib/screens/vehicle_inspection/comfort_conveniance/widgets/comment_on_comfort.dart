@@ -1,5 +1,6 @@
 import 'package:flikcar_inspection/models/feature_model.dart';
 import 'package:flikcar_inspection/services/upload_basic_details.dart';
+import 'package:flikcar_inspection/services/upload_comfort_details.dart';
 import 'package:flikcar_inspection/utils/app_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -31,17 +32,13 @@ class _CommentOnComfortState extends State<CommentOnComfort> {
               if (widget.features[index].isSelected == false) {
                 widget.features[index].isSelected = true;
 
-                Provider.of<UploadBasicDetailsService>(context, listen: false)
-                    .addFeatures(
-                        feature: widget.feature,
-                        id: widget.features[index].name);
+                Provider.of<UploadComfortDetailsService>(context, listen: false)
+                    .addComfortComments(feature: widget.features[index].name);
               } else if (widget.features[index].isSelected == true) {
                 widget.features[index].isSelected = false;
 
-                Provider.of<UploadBasicDetailsService>(context, listen: false)
-                    .addFeatures(
-                        feature: widget.feature,
-                        id: widget.features[index].name);
+                Provider.of<UploadComfortDetailsService>(context, listen: false)
+                    .addComfortComments(feature: widget.features[index].name);
               }
               setState(() {});
               //   print(widget.features[index].isSelected);

@@ -1,25 +1,24 @@
 import 'package:flikcar_inspection/models/feature_model.dart';
 import 'package:flikcar_inspection/services/upload_basic_details.dart';
-import 'package:flikcar_inspection/services/upload_exterior_details.dart';
+import 'package:flikcar_inspection/services/upload_engine_transmisson.dart';
 import 'package:flikcar_inspection/utils/app_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class CommentOnExterior extends StatefulWidget {
-  final String feature;
-
+class CommentsCheckbox extends StatefulWidget {
+  final String type;
   final List<FeatureModel> features;
-  const CommentOnExterior({
+  const CommentsCheckbox({
     super.key,
     required this.features,
-    required this.feature,
+    required this.type,
   });
 
   @override
-  State<CommentOnExterior> createState() => _CommentOnExteriorState();
+  State<CommentsCheckbox> createState() => _CommentsCheckboxState();
 }
 
-class _CommentOnExteriorState extends State<CommentOnExterior> {
+class _CommentsCheckboxState extends State<CommentsCheckbox> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -31,18 +30,16 @@ class _CommentOnExteriorState extends State<CommentOnExterior> {
             onTap: () {
               if (widget.features[index].isSelected == false) {
                 widget.features[index].isSelected = true;
-                Provider.of<UploadExteriorDetailsService>(context,
-                        listen: false)
-                    .addCommentsOnExterior(
+                Provider.of<EngineTransmissonService>(context, listen: false)
+                    .addCommentsOnEngineTransmission(
                         feature: widget.features[index].name,
-                        type: widget.feature);
+                        type: widget.type);
               } else if (widget.features[index].isSelected == true) {
                 widget.features[index].isSelected = false;
-                Provider.of<UploadExteriorDetailsService>(context,
-                        listen: false)
-                    .addCommentsOnExterior(
+                Provider.of<EngineTransmissonService>(context, listen: false)
+                    .addCommentsOnEngineTransmission(
                         feature: widget.features[index].name,
-                        type: widget.feature);
+                        type: widget.type);
               }
               setState(() {});
               //   print(widget.features[index].isSelected);

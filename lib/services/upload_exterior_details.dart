@@ -1,77 +1,12 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flikcar_inspection/models/feature_model.dart';
+import 'package:flikcar_inspection/models/image_model.dart';
 import 'package:flutter/material.dart';
 
 class UploadExteriorDetailsService extends ChangeNotifier {
-  FilePickerResult? result;
-  String? fileName;
-  bool isLoading = false;
-  File? fileToDisplay;
-  PlatformFile? pickedFile;
-  String frontMainImage = "";
-  String frontBonnetOpenImage = "";
-  String lhsFront45DegreeImage = "";
-  String lhsSideViewImage = "";
-  String rearMainImage = "";
-  String rearBootImage = "";
-  String rhsRear45DegreeImage = "";
-  String rhsSideImage = "";
-  String rhsRearDoorOpenImage = "";
-  String rhsFrontDoorOpenImage = "";
-  String dashBoardFromRearSeatImage = "";
-  String bonnetImage = "";
-  String upperCrossMemberImage = "";
-  String lowerCrossMemberImage = "";
-  String radiatorSupportImage = "";
-  String headlightSupportImage = "";
-  String lhsApronImage = "";
-  String rhsApronImage = "";
-  String frontWindshieldImage = "";
-  String firewallImage = "";
-  String cowlTopImage = "";
-  String roofImage = "";
-  String frontBumperImage = "";
-  String lhsHeadlampImage = "";
-  String rhsHeadLampImage = "";
-  String lhsFoglampImage = "";
-  String rhsFogLampImage = "";
-  String lhsFenderImage = "";
-  String lhsFrontAlloyImage = "";
-  String lhsFrontTyreImage = "";
-  String lhsOrvmImage = "";
-  String lhsAPillarImage = "";
-  String lhsFrontDoorImage = "";
-  String lhsBPillarImage = "";
-  String lhsRearDoorImage = "";
-  String lhsCPillarImage = "";
-  String lhsRunningBoardImage = "";
-  String lhsRearAlloyImage = "";
-  String lhsRearTyreImage = "";
-  String lhsQuarterPanelImage = "";
-  String rearBumperImage = "";
-  String lhsTailLampImage = "";
-  String rhsTailLampImage = "";
-  String rearWindshieldImage = "";
-  String bootDoorImage = "";
-  String spareTyreImage = "";
-  String bootFloorImage = "";
-  String rhsQuarterPanelImage = "";
-  String rhsRearAlloyImage = "";
-  String rhsRearTyreImage = "";
-  String rhsCPillarImage = "";
-  String rhsRearDoorImage = "";
-  String rhsBPillarImage = "";
-  String rhsFrontDoorImage = "";
-  String rhsAPillarImage = "";
-  String rhsRunningBoardImage = "";
-  String rhsFrontAlloyImage = "";
-  String rhsFrontTyreImage = "";
-  String rhsFenderImage = "";
-  String rhsOrvmImage = "";
-  String optionalImage1 = "";
-  String optionalImage2 = "";
   List<FeatureModel> commentOnexterior = [
     FeatureModel(name: "Customized Vehicle or Body Modified"),
     FeatureModel(name: "Body Shell Replaced"),
@@ -81,303 +16,146 @@ class UploadExteriorDetailsService extends ChangeNotifier {
     FeatureModel(name: "Strut Mounting Area Damaged"),
     FeatureModel(name: "Vehicle Color Changed"),
   ];
-  pickImage({
-    required BuildContext context,
-    required String type,
-  }) async {
-    try {
-      result = await FilePicker.platform.pickFiles(
-        type: FileType.image,
-        allowMultiple: false,
-      );
-      if (result != null) {
-        fileName = result!.files.first.name;
-        pickedFile = result!.files.first;
-        fileToDisplay = File(pickedFile!.path.toString());
-        print(fileToDisplay!.path);
-      }
-    } catch (e) {
-      print(e);
-    }
 
-    if (result != null) {
-      selectImage(imageType: type, imagePath: pickedFile!.path!);
+  List<String> selectedCommentOnExterior = [];
 
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            duration: Duration(seconds: 2),
-            backgroundColor: Color(0xFF45C08D),
-            content: Text("Image Selected"),
-          ),
-        );
-      }
-    }
-    if (result == null) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            duration: Duration(seconds: 2),
-            backgroundColor: Color(0xFF45C08D),
-            content: Text(
-              "No image selected",
-            ),
-          ),
-        );
-      }
+  addCommentsOnExterior({required String feature, required String type}) {
+    if (selectedCommentOnExterior.contains(feature)) {
+      selectedCommentOnExterior.remove(feature);
+    } else {
+      selectedCommentOnExterior.add(feature);
     }
   }
 
-  void selectImage({required String imageType, required String imagePath}) {
-    switch (imageType) {
-      case "frontMainImage":
-        frontMainImage = imagePath;
-        break;
-      case "frontBonnetOpenImage":
-        frontBonnetOpenImage = imagePath;
-        break;
-      case "lhsFront45DegreeImage":
-        lhsFront45DegreeImage = imagePath;
-        break;
-      case "lhsSideViewImage":
-        lhsSideViewImage = imagePath;
-        break;
-      case "rearMainImage":
-        rearMainImage = imagePath;
-        break;
-      case "rearBootImage":
-        rearBootImage = imagePath;
-        break;
-      case "rhsRear45DegreeImage":
-        rhsRear45DegreeImage = imagePath;
-        break;
-      case "rhsSideImage":
-        rhsSideImage = imagePath;
-        break;
-      case "rhsRearDoorOpenImage":
-        rhsRearDoorOpenImage = imagePath;
-        break;
-      case "rhsFrontDoorOpenImage":
-        rhsFrontDoorOpenImage = imagePath;
-        break;
-      case "dashBoardFromRearSeatImage":
-        dashBoardFromRearSeatImage = imagePath;
-        break;
-      case "bonnetImage":
-        bonnetImage = imagePath;
-        break;
-      case "upperCrossMemberImage":
-        upperCrossMemberImage = imagePath;
-        break;
-      case "lowerCrossMemberImage":
-        lowerCrossMemberImage = imagePath;
-        break;
-      case "radiatorSupportImage":
-        radiatorSupportImage = imagePath;
-        break;
-      case "headlightSupportImage":
-        headlightSupportImage = imagePath;
-        break;
-      case "lhsApronImage":
-        lhsApronImage = imagePath;
-        break;
-      case "rhsApronImage":
-        rhsApronImage = imagePath;
-        break;
-      case "frontWindshieldImage":
-        frontWindshieldImage = imagePath;
-        break;
-      case "firewallImage":
-        firewallImage = imagePath;
-        break;
-      case "cowlTopImage":
-        cowlTopImage = imagePath;
-        break;
-      case "roofImage":
-        roofImage = imagePath;
-        break;
-      case "frontBumperImage":
-        frontBumperImage = imagePath;
-        break;
-      case "lhsHeadlampImage":
-        lhsHeadlampImage = imagePath;
-        break;
-      case "rhsHeadLampImage":
-        rhsHeadLampImage = imagePath;
-        break;
-      case "lhsFoglampImage":
-        lhsFoglampImage = imagePath;
-        break;
-      case "rhsFogLampImage":
-        rhsFogLampImage = imagePath;
-        break;
-      case "lhsFenderImage":
-        lhsFenderImage = imagePath;
-        break;
-      case "lhsFrontAlloyImage":
-        lhsFrontAlloyImage = imagePath;
-        break;
-      case "lhsFrontTyreImage":
-        lhsFrontTyreImage = imagePath;
-        break;
-      case "lhsOrvmImage":
-        lhsOrvmImage = imagePath;
-        break;
-      case "lhsAPillarImage":
-        lhsAPillarImage = imagePath;
-        break;
-      case "lhsFrontDoorImage":
-        lhsFrontDoorImage = imagePath;
-        break;
-      case "lhsBPillarImage":
-        lhsBPillarImage = imagePath;
-        break;
-      case "lhsRearDoorImage":
-        lhsRearDoorImage = imagePath;
-        break;
-      case "lhsCPillarImage":
-        lhsCPillarImage = imagePath;
-        break;
-      case "lhsRunningBoardImage":
-        lhsRunningBoardImage = imagePath;
-        break;
-      case "lhsRearAlloyImage":
-        lhsRearAlloyImage = imagePath;
-        break;
-      case "lhsRearTyreImage":
-        lhsRearTyreImage = imagePath;
-        break;
-      case "lhsQuarterPanelImage":
-        lhsQuarterPanelImage = imagePath;
-        break;
-      case "rearBumperImage":
-        rearBumperImage = imagePath;
-        break;
-      case "lhsTailLampImage":
-        lhsTailLampImage = imagePath;
-        break;
-      case "rhsTailLampImage":
-        rhsTailLampImage = imagePath;
-        break;
-      case "rearWindshieldImage":
-        rearWindshieldImage = imagePath;
-        break;
-      case "bootDoorImage":
-        bootDoorImage = imagePath;
-        break;
-      case "spareTyreImage":
-        spareTyreImage = imagePath;
-        break;
-      case "bootFloorImage":
-        bootFloorImage = imagePath;
-        break;
-      case "rhsQuarterPanelImage":
-        rhsQuarterPanelImage = imagePath;
-        break;
-      case "rhsRearAlloyImage":
-        rhsRearAlloyImage = imagePath;
-        break;
-      case "rhsRearTyreImage":
-        rhsRearTyreImage = imagePath;
-        break;
-      case "rhsCPillarImage":
-        rhsCPillarImage = imagePath;
-        break;
-      case "rhsRearDoorImage":
-        rhsRearDoorImage = imagePath;
-        break;
-      case "rhsBPillarImage":
-        rhsBPillarImage = imagePath;
-        break;
-      case "rhsFrontDoorImage":
-        rhsFrontDoorImage = imagePath;
-        break;
-      case "rhsAPillarImage":
-        rhsAPillarImage = imagePath;
-        break;
-      case "rhsRunningBoardImage":
-        rhsRunningBoardImage = imagePath;
-        break;
-      case "rhsFrontAlloyImage":
-        rhsFrontAlloyImage = imagePath;
-        break;
-      case "rhsFrontTyreImage":
-        rhsFrontTyreImage = imagePath;
-        break;
-      case "rhsFenderImage":
-        rhsFenderImage = imagePath;
-        break;
-      case "rhsOrvmImage":
-        rhsOrvmImage = imagePath;
-        break;
-      case "optionalImage1":
-        optionalImage1 = imagePath;
-        break;
-      case "optionalImage2":
-        optionalImage2 = imagePath;
-        break;
-      default:
-        debugPrint("---------invalid choice------------");
-        break;
-    }
-    notifyListeners();
-  }
-
-  uploadExteriorDetails() {
+  uploadExteriorDetails({
+    required String carId,
+    String? bootDoor,
+    String? bootFloor,
+    String? bonnet,
+    String? cowlTop,
+    required List<ImageModel> dentImages, // optional
+    required List<ImageModel> exteriorImages,
+    String? firewall,
+    String? frontBumper,
+    String? frontWindshield,
+    String? headlightSupport,
+    String? lhsAPillar,
+    String? lhsBPillar,
+    String? lhsCPillar,
+    String? lhsFender,
+    String? lhsFrontAlloy,
+    String? lhsFrontDoor,
+    String? lhsFrontTyre,
+    String? lhsFogLamp,
+    String? lhsHeadLamp,
+    String? lhsOrvm,
+    String? lhsQuarterPanel,
+    String? lhsRearAlloy,
+    String? lhsRearDoor,
+    String? lhsRearTyre,
+    String? lhsRunningBoard,
+    String? lowerCrossMember,
+    String? radiatorSupport,
+    String? rearBumper,
+    String? rearWindshield,
+    String? rhsAPillar,
+    String? rhsBPillar,
+    String? rhsCPillar,
+    String? rhsFender,
+    String? rhsFrontAlloy,
+    String? rhsFrontDoor,
+    String? rhsFrontTyre,
+    String? rhsFogLamp,
+    String? rhsHeadLamp,
+    String? rhsOrvm,
+    String? rhsQuarterPanel,
+    String? rhsRearAlloy,
+    String? rhsRearDoor,
+    String? rhsRearTyre,
+    String? rhsRunningBoard,
+    String? roof,
+    String? spareTyre,
+    required List<ImageModel> tyreImages,
+    String? upperCrossMember,
+    String? lhsTailLamp,
+    String? rhsTailLamp,
+  }) {
+    List<Map<String, String>> dentImageList = dentImages
+        .map((image) => Map<String, String>.from(image.toJson()))
+        .toList();
+    List<Map<String, String>> tyreImageList = tyreImages
+        .map((image) => Map<String, String>.from(image.toJson()))
+        .toList();
+    List<Map<String, String>> exteriorImageList = exteriorImages
+        .map((image) => Map<String, String>.from(image.toJson()))
+        .toList();
     Map<String, dynamic> exteriorDetails = {
-      "bonnet": "",
-      "upperCrossMember": "",
-      "lowerCrossMember": "",
-      "radiatorSupport": "",
-      "headlightSupport": "",
-      "lhsApron": "",
-      "rhsApron": "",
-      "frontWindshield": "",
-      "firewall": "",
-      "cowlTop": "",
-      "roof": "",
-      "frontBumper": "",
-      "lhsHeadLamp": "",
-      "rhsHeadLamp": "",
-      "lhsFogLamp": "",
-      "rhsFogLamp": "",
-      "lhsFender": "",
-      "lhsFrontAlloy": "",
-      "lhsFrontTyre": "",
-      "lhsOrvm": "",
-      "lhsAPillar": "",
-      "lhsFrontDoor": "",
-      "lhsBPillar": "",
-      "lhsRearDoor": "",
-      "lhsCPillar": "",
-      "lhsRunningBoard": "",
-      "lhsRearAlloy": "",
-      "lhsRearTyre": "",
-      "lhsQuarterPanel": "",
-      "rearBumper": "",
-      "lhsTailLamp": "",
-      "rhsTailLamp": "",
-      "rearWindshield": "",
-      "bootDoor": "",
-      "spareTyre": "",
-      "bootFloor": "",
-      "rhsQuarterPanel": "",
-      "rhsRearAlloy": "",
-      "rhsRearTyre": "",
-      "rhsCPillar": "",
-      "rhsRearDoor": "",
-      "rhsBPillar": "",
-      "rhsFrontDoor": "",
-      "rhsAPillar": "",
-      "rhsRunningBoard": "",
-      "rhsFrontAlloy": "",
-      "rhsFrontTyre": "",
-      "rhsOrvm": "",
-      "rhsFender": "",
-      "commentsOnExterior": [],
-      "exteriorImages": [],
-      "tyreImages": [],
-      "dentImages": [] //optional
+      "bootDoor": bootDoor,
+      "bootFloor": bootFloor,
+      "bonnet": bonnet,
+      "cowlTop": cowlTop,
+      "commentsOnExterior": selectedCommentOnExterior,
+      "dentImages": dentImageList,
+      "exteriorImages": exteriorImageList,
+      "firewall": firewall,
+      "frontBumper": frontBumper,
+      "frontWindshield": frontWindshield,
+      "headlightSupport": headlightSupport,
+      "lhsAPillar": lhsAPillar,
+      "lhsBPillar": lhsBPillar,
+      "lhsCPillar": lhsCPillar,
+      "lhsFender": lhsFender,
+      "lhsFrontAlloy": lhsFrontAlloy,
+      "lhsFrontDoor": lhsFrontDoor,
+      "lhsFrontTyre": lhsFrontTyre,
+      "lhsFogLamp": lhsFogLamp,
+      "lhsHeadLamp": lhsHeadLamp,
+      "lhsOrvm": lhsOrvm,
+      "lhsQuarterPanel": lhsQuarterPanel,
+      "lhsRearAlloy": lhsRearAlloy,
+      "lhsRearDoor": lhsRearDoor,
+      "lhsRearTyre": lhsRearTyre,
+      "lhsRunningBoard": lhsRunningBoard,
+      "lowerCrossMember": lowerCrossMember,
+      "radiatorSupport": radiatorSupport,
+      "rearBumper": rearBumper,
+      "rearWindshield": rearWindshield,
+      "rhsAPillar": rhsAPillar,
+      "rhsBPillar": rhsBPillar,
+      "rhsCPillar": rhsCPillar,
+      "rhsFender": rhsFender,
+      "rhsFrontAlloy": rhsFrontAlloy,
+      "rhsFrontDoor": rhsFrontDoor,
+      "rhsFrontTyre": rhsFrontTyre,
+      "rhsFogLamp": rhsFogLamp,
+      "rhsHeadLamp": rhsHeadLamp,
+      "rhsOrvm": rhsOrvm,
+      "rhsQuarterPanel": rhsQuarterPanel,
+      "rhsRearAlloy": rhsRearAlloy,
+      "rhsRearDoor": rhsRearDoor,
+      "rhsRearTyre": rhsRearTyre,
+      "rhsRunningBoard": rhsRunningBoard,
+      "roof": roof,
+      "spareTyre": spareTyre,
+      "tyreImages": tyreImageList,
+      "upperCrossMember": upperCrossMember,
+      "lhsTailLamp": lhsTailLamp,
+      "rhsTailLamp": rhsTailLamp,
     };
+    try {
+      FirebaseFirestore firestore = FirebaseFirestore.instance;
+      DocumentReference docRef = firestore
+          .collection("auction_vehicles")
+          .doc(carId)
+          .collection("inspection")
+          .doc("inspectionData");
+      docRef.update({
+        "exteriorDetails": exteriorDetails,
+      });
+      return "SUCCESS";
+    } catch (e) {
+      debugPrint("$e");
+      return "ERROR";
+    }
   }
 }

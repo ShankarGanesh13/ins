@@ -1,27 +1,23 @@
-import 'dart:io';
-
 import 'package:flikcar_inspection/models/image_model.dart';
-import 'package:flikcar_inspection/services/upload_images.dart';
+import 'package:flikcar_inspection/services/upload_basic_details.dart';
 import 'package:flikcar_inspection/utils/app_fonts.dart';
 import 'package:flikcar_inspection/widgets/image_source.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class UploadImages extends StatelessWidget {
+class UploadBasicImages extends StatelessWidget {
   final String title;
-  final String type;
-  final List<ImageModel> imagePath;
+  final String imageType;
+  final List<String> imagePath;
   final Function() cameraFunction;
   final Function() galleryFunction;
-
-  const UploadImages({
-    super.key,
-    required this.type,
-    required this.title,
-    required this.cameraFunction,
-    required this.imagePath,
-    required this.galleryFunction,
-  });
+  const UploadBasicImages(
+      {super.key,
+      required this.imageType,
+      required this.title,
+      required this.cameraFunction,
+      required this.galleryFunction,
+      required this.imagePath});
 
   @override
   Widget build(BuildContext context) {
@@ -97,12 +93,13 @@ class UploadImages extends StatelessWidget {
                                 const Spacer(),
                                 GestureDetector(
                                   onTap: () {
-                                    Provider.of<UploadImagesService>(context,
+                                    Provider.of<UploadBasicDetailsService>(
+                                            context,
                                             listen: false)
                                         .removeImage(
-                                            image: imagePath[index],
+                                            imageType: imageType,
                                             context: context,
-                                            type: type);
+                                            image: imagePath[index]);
                                   },
                                   child: const Icon(
                                     Icons.close,
@@ -113,7 +110,7 @@ class UploadImages extends StatelessWidget {
                             ),
                             Expanded(
                               child: Image.network(
-                                imagePath[index].path,
+                                imagePath[index],
                                 fit: BoxFit.contain,
                               ),
                             ),

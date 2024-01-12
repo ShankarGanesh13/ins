@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 class UploadVideo extends StatelessWidget {
   final String title;
   final Function() function;
-  final String thumbnail;
+  final String? thumbnail;
   const UploadVideo(
       {super.key,
       required this.title,
@@ -24,7 +24,7 @@ class UploadVideo extends StatelessWidget {
           title,
           style: AppFonts.w700black16,
         ),
-        thumbnail == ""
+        thumbnail == null
             ? GestureDetector(
                 onTap: () {
                   function();
@@ -47,30 +47,28 @@ class UploadVideo extends StatelessWidget {
                 onTap: () {
                   function();
                 },
-                child: Stack(
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.only(top: 6, bottom: 15),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: const Color(0xffE0E0E0)),
-                      ),
-                      child: Image.file(
-                        File(thumbnail),
-                        height: 100,
-                        width: MediaQuery.of(context).size.width / 2.5,
-                        fit: BoxFit.contain,
-                      ),
-                    ),
-                    Positioned(
-                        height: MediaQuery.of(context).size.height / 7,
-                        width: MediaQuery.of(context).size.height / 5,
-                        child: const Icon(
-                          Icons.video_call_outlined,
-                          color: Color.fromARGB(255, 197, 197, 197),
-                          size: 35,
-                        ))
-                  ],
+                child: Container(
+                  margin: const EdgeInsets.only(top: 6, bottom: 15),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: const Color(0xffE0E0E0)),
+                  ),
+                  child: Image.network(
+                    title == "Engine Video"
+                        ? "https://firebasestorage.googleapis.com/v0/b/flikcar-bac6e.appspot.com/o/001.jpg?alt=media&token=58caa43d-3141-4969-a8ed-d10c51ea8cac"
+                        : "https://firebasestorage.googleapis.com/v0/b/flikcar-bac6e.appspot.com/o/002.jpg?alt=media&token=d47b010c-7b7f-4b9b-ab25-e99e1c31db53",
+                    height: 100,
+                    width: MediaQuery.of(context).size.width / 2.5,
+                    fit: BoxFit.contain,
+                  ),
                 ),
+                // Positioned(
+                //     height: MediaQuery.of(context).size.height / 7,
+                //     width: MediaQuery.of(context).size.height / 5,
+                //     child: const Icon(
+                //       Icons.video_call_outlined,
+                //       color: Color.fromARGB(255, 197, 197, 197),
+                //       size: 35,
+                //     ))
               ),
         Text(
           "Max Duration 20 sec",
