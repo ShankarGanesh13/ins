@@ -129,10 +129,10 @@ class _BasicDocumentDetailsState extends State<BasicDocumentDetails> {
               //     },
               //     validator: true),
               CustomTextField(
-                  title: "Customer Contact Number *",
+                  title: "Inspector Name *",
                   controller: BasicDocumentDetails.controller,
                   keyboardType: TextInputType.name,
-                  maxLength: 20,
+                  maxLength: 25,
                   onChanged: (value) {
                     BasicDocumentDetails.inspectorName = value;
                   },
@@ -140,7 +140,7 @@ class _BasicDocumentDetailsState extends State<BasicDocumentDetails> {
               CustomTextField(
                   title: "Customer Contact Number *",
                   controller: BasicDocumentDetails.controller,
-                  keyboardType: TextInputType.name,
+                  keyboardType: TextInputType.number,
                   maxLength: 10,
                   onChanged: (value) {
                     BasicDocumentDetails.customerContactNumber = value;
@@ -372,7 +372,7 @@ class _BasicDocumentDetailsState extends State<BasicDocumentDetails> {
               CustomTextField(
                   title: "Engine CC *",
                   controller: BasicDocumentDetails.controller,
-                  keyboardType: TextInputType.name,
+                  keyboardType: TextInputType.number,
                   maxLength: 40,
                   onChanged: (value) {
                     BasicDocumentDetails.engineCC = value;
@@ -735,6 +735,7 @@ class _BasicDocumentDetailsState extends State<BasicDocumentDetails> {
                     Provider.of<UploadBasicDetailsService>(context,
                             listen: false)
                         .uploadData(
+                      inspextorName: BasicDocumentDetails.inspectorName,
                       appointmentId: BasicDocumentDetails.appointmentId,
                       custContactNo: BasicDocumentDetails.customerContactNumber,
                       regType: BasicDocumentDetails.registerationType,

@@ -526,6 +526,7 @@ class UploadBasicDetailsService extends ChangeNotifier {
   }
 
   String uploadBasicDocuments({
+    required String inspectorName,
     required String carId,
     required int customerExpectedPrice,
     String? appointmentId,
@@ -818,6 +819,7 @@ class UploadBasicDetailsService extends ChangeNotifier {
   uploadData(
       {String? appointmentId,
       String? custContactNo,
+      required String inspextorName,
       required int customerExpectedPrice,
       String? city,
       String? regType,
@@ -869,6 +871,7 @@ class UploadBasicDetailsService extends ChangeNotifier {
       required String carId}) {
     uploadBasicDocuments(
       carId: carId,
+      inspectorName: inspextorName,
       appointmentId: appointmentId,
       bodyType: bodyType,
       brand: brand,
