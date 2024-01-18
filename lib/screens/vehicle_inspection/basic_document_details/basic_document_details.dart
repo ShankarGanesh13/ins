@@ -736,98 +736,99 @@ class _BasicDocumentDetailsState extends State<BasicDocumentDetails> {
           child: PrimaryButton(
               title: "Next",
               function: () {
-                // if (formKey.currentState!.validate()) {
-                //   if (thumbnail != "") {
-                //     Provider.of<UploadBasicDetailsService>(context,
-                //             listen: false)
-                //         .uploadData(
-                //       inspextorName: BasicDocumentDetails.inspectorName,
-                //       appointmentId: BasicDocumentDetails.appointmentId,
-                //       custContactNo: BasicDocumentDetails.customerContactNumber,
-                //       regType: BasicDocumentDetails.registerationType,
-                //       regNo: BasicDocumentDetails.registerationNumber,
-                //       bodyType: BasicDocumentDetails.bodyType,
-                //       brand: BasicDocumentDetails.brand,
-                //       carDescription: BasicDocumentDetails.description,
-                //       cc: BasicDocumentDetails.engineCC != null
-                //           ? int.parse(BasicDocumentDetails.engineCC!)
-                //           : null,
-                //       chassisNo: BasicDocumentDetails.chasisNumber,
-                //       city: BasicDocumentDetails.city,
-                //       color: BasicDocumentDetails.color,
-                //       duplicateKey: BasicDocumentDetails.duplicateKey,
-                //       engineNo: BasicDocumentDetails.engineNumber,
-                //       fittnessUpto: BasicDocumentDetails.fitnessUpto,
-                //       fuelType: BasicDocumentDetails.fuelType,
-                //       hypoDetails: BasicDocumentDetails.hypothecationDetails,
-                //       inspectionReport: BasicDocumentDetails.inspectionReport,
-                //       inspectionScore: BasicDocumentDetails.inspectionScore,
-                //       insurance: BasicDocumentDetails.insurance,
-                //       insuranceValidity: BasicDocumentDetails
-                //                   .insuranceValidity !=
-                //               null
-                //           ? int.parse(BasicDocumentDetails.insuranceValidity!)
-                //           : null,
-                //       kmsDriven: BasicDocumentDetails.kmsDriven,
-                //       manufacturingYear: BasicDocumentDetails.manufacturingYear,
-                //       maxPower: BasicDocumentDetails.maxPower,
-                //       maxTorque: BasicDocumentDetails.maxTorque,
-                //       mfgMonth: BasicDocumentDetails.manufacturingMonth,
-                //       mileage: BasicDocumentDetails.mileage,
-                //       missmatchInsurance:
-                //           BasicDocumentDetails.misMatchInsurance,
-                //       missmatchRC: BasicDocumentDetails.mismatchRC,
-                //       model: BasicDocumentDetails.model,
-                //       noClaimBonus: BasicDocumentDetails.noClaimBonus,
-                //       noc: BasicDocumentDetails.noc,
-                //       ownerSerialNo: BasicDocumentDetails.ownerSerialNo,
-                //       ownerType: BasicDocumentDetails.ownerType,
-                //       rcAvailablilty: BasicDocumentDetails.rcAvailability,
-                //       rcCondition: BasicDocumentDetails.rcCondition,
-                //       regDate: BasicDocumentDetails.registerationDate,
-                //       regOwnerName: BasicDocumentDetails.registeredOwnerName,
-                //       regState: BasicDocumentDetails.registerationState,
-                //       registrationYear: BasicDocumentDetails.registrationYear,
-                //       roadTax: BasicDocumentDetails.roadTax,
-                //       roadTaxValidity:
-                //           BasicDocumentDetails.roadTaxValidity != null
-                //               ? int.parse(BasicDocumentDetails.roadTaxValidity!)
-                //               : null,
-                //       rtoLocation: BasicDocumentDetails.registeredRtoVahan,
-                //       rtoNoc: BasicDocumentDetails.rtoNoc,
-                //       rtoNocIssueDate:
-                //           BasicDocumentDetails.rtoNocIssueDate != null
-                //               ? int.parse(BasicDocumentDetails.rtoNocIssueDate!)
-                //               : null,
-                //       seat: BasicDocumentDetails.seatingCapacity!,
-                //       tobeScraped: BasicDocumentDetails.toBeScrapped,
-                //       transmission: BasicDocumentDetails.transmissionType,
-                //       variant: BasicDocumentDetails.varient,
-                //       carId: widget.vehicleId,
-                //       customerExpectedPrice:
-                //           BasicDocumentDetails.customerExpectedPrice,
-                //       thumbnail: thumbnail,
-                //     );
-                Provider.of<VehicleInspectionService>(context, listen: false)
-                    .increaseIndex();
-                //   } else {
-                //     ScaffoldMessenger.of(context).showSnackBar(
-                //       const SnackBar(
-                //         duration: Duration(seconds: 2),
-                //         backgroundColor: Color(0xFF45C08D),
-                //         content: Text("Add thumbnail Image"),
-                //       ),
-                //     );
-                //   }
-                // } else {
-                //   ScaffoldMessenger.of(context).showSnackBar(
-                //     const SnackBar(
-                //       duration: Duration(seconds: 2),
-                //       backgroundColor: Color(0xFF45C08D),
-                //       content: Text("Upload all required data"),
-                //     ),
-                //   );
-                // }
+                if (formKey.currentState!.validate()) {
+                  if (thumbnail != "") {
+                    Provider.of<UploadBasicDetailsService>(context,
+                            listen: false)
+                        .uploadData(
+                      inspextorName: BasicDocumentDetails.inspectorName,
+                      appointmentId: BasicDocumentDetails.appointmentId,
+                      custContactNo: BasicDocumentDetails.customerContactNumber,
+                      regType: BasicDocumentDetails.registerationType,
+                      regNo: BasicDocumentDetails.registerationNumber,
+                      bodyType: BasicDocumentDetails.bodyType,
+                      brand: BasicDocumentDetails.brand,
+                      carDescription: BasicDocumentDetails.description,
+                      cc: BasicDocumentDetails.engineCC != null
+                          ? int.parse(BasicDocumentDetails.engineCC!)
+                          : null,
+                      chassisNo: BasicDocumentDetails.chasisNumber,
+                      city: BasicDocumentDetails.city,
+                      color: BasicDocumentDetails.color,
+                      duplicateKey: BasicDocumentDetails.duplicateKey,
+                      engineNo: BasicDocumentDetails.engineNumber,
+                      fittnessUpto: BasicDocumentDetails.fitnessUpto,
+                      fuelType: BasicDocumentDetails.fuelType,
+                      hypoDetails: BasicDocumentDetails.hypothecationDetails,
+                      inspectionReport: BasicDocumentDetails.inspectionReport,
+                      inspectionScore: BasicDocumentDetails.inspectionScore,
+                      insurance: BasicDocumentDetails.insurance,
+                      insuranceValidity: BasicDocumentDetails
+                                  .insuranceValidity !=
+                              null
+                          ? int.parse(BasicDocumentDetails.insuranceValidity!)
+                          : null,
+                      kmsDriven: BasicDocumentDetails.kmsDriven,
+                      manufacturingYear: BasicDocumentDetails.manufacturingYear,
+                      maxPower: BasicDocumentDetails.maxPower,
+                      maxTorque: BasicDocumentDetails.maxTorque,
+                      mfgMonth: BasicDocumentDetails.manufacturingMonth,
+                      mileage: BasicDocumentDetails.mileage,
+                      missmatchInsurance:
+                          BasicDocumentDetails.misMatchInsurance,
+                      missmatchRC: BasicDocumentDetails.mismatchRC,
+                      model: BasicDocumentDetails.model,
+                      noClaimBonus: BasicDocumentDetails.noClaimBonus,
+                      noc: BasicDocumentDetails.noc,
+                      ownerSerialNo: BasicDocumentDetails.ownerSerialNo,
+                      ownerType: BasicDocumentDetails.ownerType,
+                      rcAvailablilty: BasicDocumentDetails.rcAvailability,
+                      rcCondition: BasicDocumentDetails.rcCondition,
+                      regDate: BasicDocumentDetails.registerationDate,
+                      regOwnerName: BasicDocumentDetails.registeredOwnerName,
+                      regState: BasicDocumentDetails.registerationState,
+                      registrationYear: BasicDocumentDetails.registrationYear,
+                      roadTax: BasicDocumentDetails.roadTax,
+                      roadTaxValidity:
+                          BasicDocumentDetails.roadTaxValidity != null
+                              ? int.parse(BasicDocumentDetails.roadTaxValidity!)
+                              : null,
+                      rtoLocation: BasicDocumentDetails.registeredRtoVahan,
+                      rtoNoc: BasicDocumentDetails.rtoNoc,
+                      rtoNocIssueDate:
+                          BasicDocumentDetails.rtoNocIssueDate != null
+                              ? int.parse(BasicDocumentDetails.rtoNocIssueDate!)
+                              : null,
+                      seat: BasicDocumentDetails.seatingCapacity!,
+                      tobeScraped: BasicDocumentDetails.toBeScrapped,
+                      transmission: BasicDocumentDetails.transmissionType,
+                      variant: BasicDocumentDetails.varient,
+                      carId: widget.vehicleId,
+                      customerExpectedPrice:
+                          BasicDocumentDetails.customerExpectedPrice,
+                      thumbnail: thumbnail,
+                    );
+                    Provider.of<VehicleInspectionService>(context,
+                            listen: false)
+                        .increaseIndex();
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        duration: Duration(seconds: 2),
+                        backgroundColor: Color(0xFF45C08D),
+                        content: Text("Add thumbnail Image"),
+                      ),
+                    );
+                  }
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      duration: Duration(seconds: 2),
+                      backgroundColor: Color(0xFF45C08D),
+                      content: Text("Upload all required data"),
+                    ),
+                  );
+                }
               },
               borderColor: const Color(0xff161F31),
               backgroundColor: const Color(0xff161F31),

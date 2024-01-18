@@ -129,10 +129,10 @@ class UploadVehicleImages extends StatelessWidget {
           child: PrimaryButton(
             title: "Next",
             function: () {
-              // Provider.of<UploadImagesService>(context, listen: false)
-              //     .uploadAuctionCarImages(carId: vehicleId, context: context);
-              Provider.of<VehicleInspectionService>(context, listen: false)
-                  .increaseIndex();
+              Provider.of<UploadImagesService>(context, listen: false)
+                  .uploadAuctionCarImages(carId: vehicleId, context: context);
+              // Provider.of<VehicleInspectionService>(context, listen: false)
+              //     .increaseIndex();
             },
             borderColor: const Color(0xff161F31),
             backgroundColor: const Color(0xff161F31),
