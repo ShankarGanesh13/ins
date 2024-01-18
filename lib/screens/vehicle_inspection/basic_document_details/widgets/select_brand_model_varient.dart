@@ -29,9 +29,18 @@ class _SelectBrandModelVarientState extends State<SelectBrandModelVarient> {
   @override
   Widget build(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Text(
-        "Brand *",
-        style: AppFonts.w500black14,
+      Row(
+        children: [
+          Text(
+            "Brand ",
+            style: AppFonts.w500black14,
+          ),
+          const Text(
+            "*",
+            style: TextStyle(
+                color: Colors.red, fontSize: 16, fontWeight: FontWeight.w700),
+          )
+        ],
       ),
       const SizedBox(
         height: 8,
@@ -114,9 +123,18 @@ class _SelectBrandModelVarientState extends State<SelectBrandModelVarient> {
       ),
       ////////////////////////////////
       ///model
-      Text(
-        "Model *",
-        style: AppFonts.w500black14,
+      Row(
+        children: [
+          Text(
+            "Model ",
+            style: AppFonts.w500black14,
+          ),
+          const Text(
+            "*",
+            style: TextStyle(
+                color: Colors.red, fontSize: 16, fontWeight: FontWeight.w700),
+          )
+        ],
       ),
       const SizedBox(
         height: 8,
@@ -189,9 +207,18 @@ class _SelectBrandModelVarientState extends State<SelectBrandModelVarient> {
       ),
       ////////////////////////
       ///varient
-      Text(
-        "Varient *",
-        style: AppFonts.w500black14,
+      Row(
+        children: [
+          Text(
+            "Varient ",
+            style: AppFonts.w500black14,
+          ),
+          const Text(
+            "*",
+            style: TextStyle(
+                color: Colors.red, fontSize: 16, fontWeight: FontWeight.w700),
+          )
+        ],
       ),
       const SizedBox(
         height: 10,

@@ -36,10 +36,10 @@ class ExteriorDetails extends StatelessWidget {
     "Chinese Tyre",
     "Resoaled",
     "Damaged",
-    "Tyre Life (10%-29%)",
-    "Tyre Life (30%-49%)",
-    "Tyre Life (50%-79%)",
-    "Tyre Life (80%-100%)",
+    "Tyre Life (10-25mm)",
+    "Tyre Life (26-50mm)",
+    "Tyre Life (51-75mm)",
+    "Tyre Life (76-100mm)",
   ];
   String? bootDoor;
   String? bootFloor;

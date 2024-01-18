@@ -71,7 +71,7 @@ class UploadVideo extends StatelessWidget {
                 //     ))
               ),
         Text(
-          "Max Duration 20 sec",
+          "Max Duration 30 sec",
           style: AppFonts.w500black11,
         ),
         const SizedBox(

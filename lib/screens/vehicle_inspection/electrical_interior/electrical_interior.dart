@@ -65,7 +65,7 @@ class ElectricalInterior extends StatelessWidget {
                   odometerReading = value;
                   print("odometerReading $odometerReading");
                 },
-                validator: true),
+                validator: false),
             CustomDropDown(
                 title: "Fuel Level ",
                 onChanged: (value) {

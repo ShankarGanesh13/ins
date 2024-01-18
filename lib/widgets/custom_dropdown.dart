@@ -19,9 +19,22 @@ class CustomDropDown extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          title,
-          style: AppFonts.w500black14,
+        Row(
+          children: [
+            Text(
+              title,
+              style: AppFonts.w500black14,
+            ),
+            validate == true
+                ? const Text(
+                    " *",
+                    style: TextStyle(
+                        color: Colors.red,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700),
+                  )
+                : SizedBox()
+          ],
         ),
         const SizedBox(
           height: 8,

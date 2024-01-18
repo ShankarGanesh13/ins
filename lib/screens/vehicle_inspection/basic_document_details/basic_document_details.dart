@@ -129,7 +129,7 @@ class _BasicDocumentDetailsState extends State<BasicDocumentDetails> {
               //     },
               //     validator: true),
               CustomTextField(
-                  title: "Inspector Name *",
+                  title: "Inspector Name ",
                   controller: BasicDocumentDetails.controller,
                   keyboardType: TextInputType.name,
                   maxLength: 25,
@@ -138,7 +138,7 @@ class _BasicDocumentDetailsState extends State<BasicDocumentDetails> {
                   },
                   validator: true),
               CustomTextField(
-                  title: "Customer Contact Number *",
+                  title: "Customer Contact Number ",
                   controller: BasicDocumentDetails.controller,
                   keyboardType: TextInputType.number,
                   maxLength: 10,
@@ -148,7 +148,7 @@ class _BasicDocumentDetailsState extends State<BasicDocumentDetails> {
                   validator: true),
 
               CustomTextField(
-                  title: "Customer Expected Price *",
+                  title: "Customer Expected Price ",
                   controller: BasicDocumentDetails.controller,
                   keyboardType: TextInputType.number,
                   maxLength: 10,
@@ -162,7 +162,7 @@ class _BasicDocumentDetailsState extends State<BasicDocumentDetails> {
               ///
               ///
               CustomTextField(
-                  title: "City *",
+                  title: "City ",
                   controller: BasicDocumentDetails.controller,
                   keyboardType: TextInputType.name,
                   maxLength: 30,
@@ -182,7 +182,7 @@ class _BasicDocumentDetailsState extends State<BasicDocumentDetails> {
                   },
                   dropdownItems: const ["Private", "Commercial"]),
               CustomTextField(
-                  title: "Registeration Number *",
+                  title: "Registeration Number ",
                   controller: BasicDocumentDetails.controller,
                   keyboardType: TextInputType.name,
                   maxLength: 15,
@@ -228,12 +228,14 @@ class _BasicDocumentDetailsState extends State<BasicDocumentDetails> {
                     "Not Applicable",
                   ]),
               DateTimeTextfield(
+                validate: false,
                 title: "Registeration Date",
                 onChanged: (value) {
                   BasicDocumentDetails.registerationDate = value;
                 },
               ),
               DateTimeTextfield(
+                validate: true,
                 title: "Fitness Upto",
                 onChanged: (value) {
                   BasicDocumentDetails.fitnessUpto = value;
@@ -250,7 +252,7 @@ class _BasicDocumentDetailsState extends State<BasicDocumentDetails> {
               ///
               ///
               CustomDropDown(
-                  title: "Registeration State ",
+                  title: "Registration State ",
                   onChanged: (value) {
                     BasicDocumentDetails.registerationState = value;
                   },
@@ -337,10 +339,11 @@ class _BasicDocumentDetailsState extends State<BasicDocumentDetails> {
                   validator: false),
 
               CustomDropDown(
-                  title: "Manufacturing Month *",
+                  title: "Manufacturing Month",
                   onChanged: (value) {
                     BasicDocumentDetails.manufacturingMonth = value;
                   },
+                  validate: true,
                   dropdownItems: const [
                     "Jan",
                     "Feb",
@@ -356,21 +359,21 @@ class _BasicDocumentDetailsState extends State<BasicDocumentDetails> {
                   ]),
 
               CustomDropDown(
-                  title: "Manufacturing Year *",
+                  title: "Manufacturing Year",
                   onChanged: (value) {
                     BasicDocumentDetails.manufacturingYear = int.parse(value);
                   },
                   validate: true,
                   dropdownItems: getYears()),
               CustomDropDown(
-                  title: "Fuel Type *",
+                  title: "Fuel Type",
                   onChanged: (value) {
                     BasicDocumentDetails.fuelType = value;
                   },
                   validate: true,
                   dropdownItems: const ["Petrol", "Diesel", "Electric", "LPG"]),
               CustomTextField(
-                  title: "Engine CC *",
+                  title: "Engine CC ",
                   controller: BasicDocumentDetails.controller,
                   keyboardType: TextInputType.number,
                   maxLength: 40,
@@ -408,7 +411,7 @@ class _BasicDocumentDetailsState extends State<BasicDocumentDetails> {
               ),
 
               CustomTextField(
-                  title: "Seating Capacity *",
+                  title: "Seating Capacity ",
                   controller: BasicDocumentDetails.controller,
                   keyboardType: TextInputType.number,
                   maxLength: 40,
@@ -430,7 +433,7 @@ class _BasicDocumentDetailsState extends State<BasicDocumentDetails> {
                     "Color"
                   ]),
               CustomDropDown(
-                  title: "Road Tax *",
+                  title: "Road Tax ",
                   onChanged: (value) {
                     BasicDocumentDetails.roadTax = value;
                   },
@@ -440,7 +443,8 @@ class _BasicDocumentDetailsState extends State<BasicDocumentDetails> {
                     "Limited Period",
                   ]),
               DateTimeTextfield(
-                title: "Road Tax Validity Upto *",
+                validate: false,
+                title: "Road Tax Validity Upto ",
                 onChanged: (value) {
                   BasicDocumentDetails.roadTaxValidity = value;
                 },
@@ -490,6 +494,7 @@ class _BasicDocumentDetailsState extends State<BasicDocumentDetails> {
               ),
 
               DateTimeTextfield(
+                validate: false,
                 title: "Insurance Validity ",
                 onChanged: (value) {
                   BasicDocumentDetails.insuranceValidity = value;
@@ -576,10 +581,11 @@ class _BasicDocumentDetailsState extends State<BasicDocumentDetails> {
                 onChanged: (value) {
                   BasicDocumentDetails.rtoNocIssueDate = value;
                 },
+                validate: false,
               ),
 
               CustomDropDown(
-                  title: "Registration Year *",
+                  title: "Registration Year ",
                   onChanged: (value) {
                     BasicDocumentDetails.registrationYear = int.parse(value);
                   },
@@ -593,7 +599,7 @@ class _BasicDocumentDetailsState extends State<BasicDocumentDetails> {
                         ? snapshot.data!.map((e) => e.bodyType).toList()
                         : [];
                     return CustomDropDown(
-                        title: "Body Type *",
+                        title: "Body Type ",
                         onChanged: (value) {
                           BasicDocumentDetails.bodyType = value;
                         },
@@ -601,7 +607,7 @@ class _BasicDocumentDetailsState extends State<BasicDocumentDetails> {
                         dropdownItems: data);
                   }),
               CustomDropDown(
-                  title: "Tansmission Type *",
+                  title: "Tansmission Type ",
                   onChanged: (value) {
                     BasicDocumentDetails.transmissionType = value;
                   },
@@ -614,7 +620,7 @@ class _BasicDocumentDetailsState extends State<BasicDocumentDetails> {
                         ? snapshot.data!.map((e) => e.ownerType).toList()
                         : [];
                     return CustomDropDown(
-                        title: "Owner Type *",
+                        title: "Owner Type ",
                         onChanged: (value) {
                           BasicDocumentDetails.ownerType = value;
                         },
@@ -627,7 +633,7 @@ class _BasicDocumentDetailsState extends State<BasicDocumentDetails> {
                 },
               ),
               CustomTextField(
-                  title: "Kilometers Driven *",
+                  title: "Kilometers Driven ",
                   controller: BasicDocumentDetails.controller,
                   keyboardType: TextInputType.number,
                   maxLength: 40,
@@ -671,14 +677,14 @@ class _BasicDocumentDetailsState extends State<BasicDocumentDetails> {
                   },
                   validator: false),
               MultiLineTextfield(
-                  title: "Inspection Report *",
+                  title: "Inspection Report ",
                   keyboardType: TextInputType.multiline,
                   onChanged: (value) {
                     BasicDocumentDetails.inspectionReport = value;
                   },
                   validator: true),
               CustomTextField(
-                  title: "Inspection Score *",
+                  title: "Inspection Score ",
                   controller: BasicDocumentDetails.controller,
                   keyboardType: TextInputType.number,
                   maxLength: 4,
@@ -687,7 +693,7 @@ class _BasicDocumentDetailsState extends State<BasicDocumentDetails> {
                   },
                   validator: true),
               Upload1Image(
-                  title: "Thumbnail*",
+                  title: "Thumbnail",
                   image:
                       context.watch<UploadImagesService>().thumbnailImagePath,
                   function: () {
@@ -730,99 +736,98 @@ class _BasicDocumentDetailsState extends State<BasicDocumentDetails> {
           child: PrimaryButton(
               title: "Next",
               function: () {
-                if (formKey.currentState!.validate()) {
-                  if (thumbnail != "") {
-                    Provider.of<UploadBasicDetailsService>(context,
-                            listen: false)
-                        .uploadData(
-                      inspextorName: BasicDocumentDetails.inspectorName,
-                      appointmentId: BasicDocumentDetails.appointmentId,
-                      custContactNo: BasicDocumentDetails.customerContactNumber,
-                      regType: BasicDocumentDetails.registerationType,
-                      regNo: BasicDocumentDetails.registerationNumber,
-                      bodyType: BasicDocumentDetails.bodyType,
-                      brand: BasicDocumentDetails.brand,
-                      carDescription: BasicDocumentDetails.description,
-                      cc: BasicDocumentDetails.engineCC != null
-                          ? int.parse(BasicDocumentDetails.engineCC!)
-                          : null,
-                      chassisNo: BasicDocumentDetails.chasisNumber,
-                      city: BasicDocumentDetails.city,
-                      color: BasicDocumentDetails.color,
-                      duplicateKey: BasicDocumentDetails.duplicateKey,
-                      engineNo: BasicDocumentDetails.engineNumber,
-                      fittnessUpto: BasicDocumentDetails.fitnessUpto,
-                      fuelType: BasicDocumentDetails.fuelType,
-                      hypoDetails: BasicDocumentDetails.hypothecationDetails,
-                      inspectionReport: BasicDocumentDetails.inspectionReport,
-                      inspectionScore: BasicDocumentDetails.inspectionScore,
-                      insurance: BasicDocumentDetails.insurance,
-                      insuranceValidity: BasicDocumentDetails
-                                  .insuranceValidity !=
-                              null
-                          ? int.parse(BasicDocumentDetails.insuranceValidity!)
-                          : null,
-                      kmsDriven: BasicDocumentDetails.kmsDriven,
-                      manufacturingYear: BasicDocumentDetails.manufacturingYear,
-                      maxPower: BasicDocumentDetails.maxPower,
-                      maxTorque: BasicDocumentDetails.maxTorque,
-                      mfgMonth: BasicDocumentDetails.manufacturingMonth,
-                      mileage: BasicDocumentDetails.mileage,
-                      missmatchInsurance:
-                          BasicDocumentDetails.misMatchInsurance,
-                      missmatchRC: BasicDocumentDetails.mismatchRC,
-                      model: BasicDocumentDetails.model,
-                      noClaimBonus: BasicDocumentDetails.noClaimBonus,
-                      noc: BasicDocumentDetails.noc,
-                      ownerSerialNo: BasicDocumentDetails.ownerSerialNo,
-                      ownerType: BasicDocumentDetails.ownerType,
-                      rcAvailablilty: BasicDocumentDetails.rcAvailability,
-                      rcCondition: BasicDocumentDetails.rcCondition,
-                      regDate: BasicDocumentDetails.registerationDate,
-                      regOwnerName: BasicDocumentDetails.registeredOwnerName,
-                      regState: BasicDocumentDetails.registerationState,
-                      registrationYear: BasicDocumentDetails.registrationYear,
-                      roadTax: BasicDocumentDetails.roadTax,
-                      roadTaxValidity:
-                          BasicDocumentDetails.roadTaxValidity != null
-                              ? int.parse(BasicDocumentDetails.roadTaxValidity!)
-                              : null,
-                      rtoLocation: BasicDocumentDetails.registeredRtoVahan,
-                      rtoNoc: BasicDocumentDetails.rtoNoc,
-                      rtoNocIssueDate:
-                          BasicDocumentDetails.rtoNocIssueDate != null
-                              ? int.parse(BasicDocumentDetails.rtoNocIssueDate!)
-                              : null,
-                      seat: BasicDocumentDetails.seatingCapacity!,
-                      tobeScraped: BasicDocumentDetails.toBeScrapped,
-                      transmission: BasicDocumentDetails.transmissionType,
-                      variant: BasicDocumentDetails.varient,
-                      carId: widget.vehicleId,
-                      customerExpectedPrice:
-                          BasicDocumentDetails.customerExpectedPrice,
-                      thumbnail: thumbnail,
-                    );
-                    Provider.of<VehicleInspectionService>(context,
-                            listen: false)
-                        .increaseIndex();
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        duration: Duration(seconds: 2),
-                        backgroundColor: Color(0xFF45C08D),
-                        content: Text("Add thumbnail Image"),
-                      ),
-                    );
-                  }
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      duration: Duration(seconds: 2),
-                      backgroundColor: Color(0xFF45C08D),
-                      content: Text("Upload all required data"),
-                    ),
-                  );
-                }
+                // if (formKey.currentState!.validate()) {
+                //   if (thumbnail != "") {
+                //     Provider.of<UploadBasicDetailsService>(context,
+                //             listen: false)
+                //         .uploadData(
+                //       inspextorName: BasicDocumentDetails.inspectorName,
+                //       appointmentId: BasicDocumentDetails.appointmentId,
+                //       custContactNo: BasicDocumentDetails.customerContactNumber,
+                //       regType: BasicDocumentDetails.registerationType,
+                //       regNo: BasicDocumentDetails.registerationNumber,
+                //       bodyType: BasicDocumentDetails.bodyType,
+                //       brand: BasicDocumentDetails.brand,
+                //       carDescription: BasicDocumentDetails.description,
+                //       cc: BasicDocumentDetails.engineCC != null
+                //           ? int.parse(BasicDocumentDetails.engineCC!)
+                //           : null,
+                //       chassisNo: BasicDocumentDetails.chasisNumber,
+                //       city: BasicDocumentDetails.city,
+                //       color: BasicDocumentDetails.color,
+                //       duplicateKey: BasicDocumentDetails.duplicateKey,
+                //       engineNo: BasicDocumentDetails.engineNumber,
+                //       fittnessUpto: BasicDocumentDetails.fitnessUpto,
+                //       fuelType: BasicDocumentDetails.fuelType,
+                //       hypoDetails: BasicDocumentDetails.hypothecationDetails,
+                //       inspectionReport: BasicDocumentDetails.inspectionReport,
+                //       inspectionScore: BasicDocumentDetails.inspectionScore,
+                //       insurance: BasicDocumentDetails.insurance,
+                //       insuranceValidity: BasicDocumentDetails
+                //                   .insuranceValidity !=
+                //               null
+                //           ? int.parse(BasicDocumentDetails.insuranceValidity!)
+                //           : null,
+                //       kmsDriven: BasicDocumentDetails.kmsDriven,
+                //       manufacturingYear: BasicDocumentDetails.manufacturingYear,
+                //       maxPower: BasicDocumentDetails.maxPower,
+                //       maxTorque: BasicDocumentDetails.maxTorque,
+                //       mfgMonth: BasicDocumentDetails.manufacturingMonth,
+                //       mileage: BasicDocumentDetails.mileage,
+                //       missmatchInsurance:
+                //           BasicDocumentDetails.misMatchInsurance,
+                //       missmatchRC: BasicDocumentDetails.mismatchRC,
+                //       model: BasicDocumentDetails.model,
+                //       noClaimBonus: BasicDocumentDetails.noClaimBonus,
+                //       noc: BasicDocumentDetails.noc,
+                //       ownerSerialNo: BasicDocumentDetails.ownerSerialNo,
+                //       ownerType: BasicDocumentDetails.ownerType,
+                //       rcAvailablilty: BasicDocumentDetails.rcAvailability,
+                //       rcCondition: BasicDocumentDetails.rcCondition,
+                //       regDate: BasicDocumentDetails.registerationDate,
+                //       regOwnerName: BasicDocumentDetails.registeredOwnerName,
+                //       regState: BasicDocumentDetails.registerationState,
+                //       registrationYear: BasicDocumentDetails.registrationYear,
+                //       roadTax: BasicDocumentDetails.roadTax,
+                //       roadTaxValidity:
+                //           BasicDocumentDetails.roadTaxValidity != null
+                //               ? int.parse(BasicDocumentDetails.roadTaxValidity!)
+                //               : null,
+                //       rtoLocation: BasicDocumentDetails.registeredRtoVahan,
+                //       rtoNoc: BasicDocumentDetails.rtoNoc,
+                //       rtoNocIssueDate:
+                //           BasicDocumentDetails.rtoNocIssueDate != null
+                //               ? int.parse(BasicDocumentDetails.rtoNocIssueDate!)
+                //               : null,
+                //       seat: BasicDocumentDetails.seatingCapacity!,
+                //       tobeScraped: BasicDocumentDetails.toBeScrapped,
+                //       transmission: BasicDocumentDetails.transmissionType,
+                //       variant: BasicDocumentDetails.varient,
+                //       carId: widget.vehicleId,
+                //       customerExpectedPrice:
+                //           BasicDocumentDetails.customerExpectedPrice,
+                //       thumbnail: thumbnail,
+                //     );
+                Provider.of<VehicleInspectionService>(context, listen: false)
+                    .increaseIndex();
+                //   } else {
+                //     ScaffoldMessenger.of(context).showSnackBar(
+                //       const SnackBar(
+                //         duration: Duration(seconds: 2),
+                //         backgroundColor: Color(0xFF45C08D),
+                //         content: Text("Add thumbnail Image"),
+                //       ),
+                //     );
+                //   }
+                // } else {
+                //   ScaffoldMessenger.of(context).showSnackBar(
+                //     const SnackBar(
+                //       duration: Duration(seconds: 2),
+                //       backgroundColor: Color(0xFF45C08D),
+                //       content: Text("Upload all required data"),
+                //     ),
+                //   );
+                // }
               },
               borderColor: const Color(0xff161F31),
               backgroundColor: const Color(0xff161F31),

@@ -20,9 +20,19 @@ class MultiLineTextfield extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          title,
-          style: AppFonts.w500black14,
+        Row(
+          children: [
+            Text(
+              title,
+              style: AppFonts.w500black14,
+            ),
+            validator == true
+                ? const Text(
+                    " *",
+                    style: TextStyle(color: Colors.red),
+                  )
+                : const SizedBox()
+          ],
         ),
         const SizedBox(
           height: 8,

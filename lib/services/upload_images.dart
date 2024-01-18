@@ -387,7 +387,7 @@ class UploadImagesService extends ChangeNotifier {
         final videoFile = File(pickedVideoFile!.path.toString());
         final videoDuration = await getVideoDuration(videoFile);
 
-        if (videoDuration <= const Duration(seconds: 21)) {
+        if (videoDuration <= const Duration(seconds: 31)) {
           debugPrint("video selected");
           if (context.mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -424,7 +424,7 @@ class UploadImagesService extends ChangeNotifier {
                 duration: Duration(seconds: 2),
                 backgroundColor: Colors.red,
                 content: Text(
-                  "Selected video is too long (max 20 seconds)",
+                  "Selected video is too long (max 30 seconds)",
                 ),
               ),
             );

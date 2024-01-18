@@ -147,7 +147,7 @@ class ComfortConveniance extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.only(top: 8),
           child: PrimaryButton(
-              title: "Upload",
+              title: "Finish",
               function: () {
                 Provider.of<UploadComfortDetailsService>(context, listen: false)
                     .uploadComfortDetails(

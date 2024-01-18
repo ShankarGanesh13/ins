@@ -3,6 +3,7 @@ import 'package:flikcar_inspection/screens/login_screen/login_screen.dart';
 import 'package:flikcar_inspection/screens/vehicle_inspection/basic_document_details/basic_document_details.dart';
 import 'package:flikcar_inspection/screens/vehicle_inspection/upload_vehicle_images/upload_vehicle_images.dart';
 import 'package:flikcar_inspection/screens/vehicle_inspection/vehicle_inspection.dart';
+import 'package:flikcar_inspection/services/auth_service.dart';
 import 'package:flikcar_inspection/services/upload_basic_details.dart';
 import 'package:flikcar_inspection/services/upload_comfort_details.dart';
 import 'package:flikcar_inspection/services/upload_electrical_interior.dart';
@@ -50,7 +51,14 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: LoginScreen(),
+      home: FutureBuilder<Widget>(
+          future: AuthService().chooseScreen(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return LoginScreen();
+            }
+            return snapshot.data!;
+          }),
     );
   }
 }

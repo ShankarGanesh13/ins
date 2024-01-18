@@ -23,7 +23,7 @@ class _CommentsCheckboxState extends State<CommentsCheckbox> {
   Widget build(BuildContext context) {
     return ListView.builder(
         shrinkWrap: true,
-        physics: NeverScrollableScrollPhysics(),
+        physics: const NeverScrollableScrollPhysics(),
         itemCount: widget.features.length,
         itemBuilder: (context, index) {
           return GestureDetector(

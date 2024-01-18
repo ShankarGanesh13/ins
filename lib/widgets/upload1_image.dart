@@ -19,9 +19,18 @@ class Upload1Image extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          title,
-          style: AppFonts.w700black16,
+        Row(
+          children: [
+            Text(
+              title,
+              style: AppFonts.w700black16,
+            ),
+            const Text(
+              " *",
+              style: TextStyle(
+                  color: Colors.red, fontSize: 18, fontWeight: FontWeight.w700),
+            ),
+          ],
         ),
         image == ""
             ? GestureDetector(
@@ -51,7 +60,7 @@ class Upload1Image extends StatelessWidget {
                   decoration: BoxDecoration(
                     border: Border.all(color: const Color(0xffE0E0E0)),
                   ),
-                  child: Image.network( 
+                  child: Image.network(
                     image,
                     height: 150,
                     width: MediaQuery.of(context).size.width / 2,

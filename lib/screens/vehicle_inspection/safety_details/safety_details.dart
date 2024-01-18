@@ -30,7 +30,6 @@ class SafetyDetails extends StatelessWidget {
     "Okay",
     "Deployed",
     "Removed",
-    "Airbag Warning Light Glowing"
   ];
 
   @override

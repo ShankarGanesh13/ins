@@ -1,12 +1,17 @@
 import 'package:flikcar_inspection/utils/app_fonts.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class DateTimeTextfield extends StatefulWidget {
   final String title;
   final ValueChanged onChanged;
+  final bool validate;
   const DateTimeTextfield(
-      {super.key, required this.title, required this.onChanged});
+      {super.key,
+      required this.title,
+      required this.onChanged,
+      required this.validate});
 
   @override
   State<DateTimeTextfield> createState() => _DateTimeTextfieldState();
@@ -20,9 +25,22 @@ class _DateTimeTextfieldState extends State<DateTimeTextfield> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          widget.title,
-          style: AppFonts.w500black14,
+        Row(
+          children: [
+            Text(
+              widget.title,
+              style: AppFonts.w500black14,
+            ),
+            widget.validate == true
+                ? const Text(
+                    " *",
+                    style: TextStyle(
+                        color: Colors.red,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700),
+                  )
+                : const SizedBox()
+          ],
         ),
         const SizedBox(
           height: 8,

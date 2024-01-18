@@ -22,9 +22,22 @@ class CustomTextField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          title,
-          style: AppFonts.w500black14,
+        Row(
+          children: [
+            Text(
+              title,
+              style: AppFonts.w500black14,
+            ),
+            validator == true
+                ? const Text(
+                    "*",
+                    style: TextStyle(
+                        color: Colors.red,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 16),
+                  )
+                : const SizedBox()
+          ],
         ),
         const SizedBox(
           height: 8,
