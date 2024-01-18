@@ -1,18 +1,21 @@
 import 'dart:io';
 
 import 'package:flikcar_inspection/utils/app_fonts.dart';
+import 'package:flikcar_inspection/widgets/image_source.dart';
 import 'package:flutter/material.dart';
 
 class Upload1Image extends StatelessWidget {
   final String title;
   final String image;
-  final Function() function;
+  final Function() galleryfunction;
+  final Function() camerafunction;
 
   const Upload1Image(
       {super.key,
       required this.title,
       required this.image,
-      required this.function});
+      required this.camerafunction,
+      required this.galleryfunction});
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +38,18 @@ class Upload1Image extends StatelessWidget {
         image == ""
             ? GestureDetector(
                 onTap: () {
-                  function();
+                  showModalBottomSheet<void>(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return ImageSource(
+                          galleryFunction: () {
+                            galleryfunction();
+                          },
+                          cameraFunction: () {
+                            camerafunction();
+                          },
+                        );
+                      });
                 },
                 child: Container(
                   height: 150,
@@ -53,7 +67,18 @@ class Upload1Image extends StatelessWidget {
               )
             : GestureDetector(
                 onTap: () {
-                  function();
+                  showModalBottomSheet<void>(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return ImageSource(
+                          galleryFunction: () {
+                            galleryfunction();
+                          },
+                          cameraFunction: () {
+                            camerafunction();
+                          },
+                        );
+                      });
                 },
                 child: Container(
                   margin: const EdgeInsets.only(top: 6, bottom: 15),

@@ -696,7 +696,11 @@ class _BasicDocumentDetailsState extends State<BasicDocumentDetails> {
                   title: "Thumbnail",
                   image:
                       context.watch<UploadImagesService>().thumbnailImagePath,
-                  function: () {
+                  camerafunction: () {
+                    Provider.of<UploadImagesService>(context, listen: false)
+                        .carImagesCamera(context: context, type: "thumbnail");
+                  },
+                  galleryfunction: () {
                     Provider.of<UploadImagesService>(context, listen: false)
                         .pickCarImages(context: context, type: "thumbnail");
                   }),
