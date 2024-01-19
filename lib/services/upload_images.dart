@@ -7,9 +7,6 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flikcar_inspection/models/image_model.dart';
-import 'package:flikcar_inspection/screens/image_editor_screen/image_editor_screen.dart';
-import 'package:flikcar_inspection/utils/app_fonts.dart';
-import 'package:flikcar_inspection/widgets/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -163,7 +160,9 @@ class UploadImagesService extends ChangeNotifier {
       required bool multipleSelect,
       required String type,
       required List<ImageModel> images}) async {
-    List<XFile>? files = await ImagePicker().pickMultiImage(imageQuality: 60);
+    List<XFile>? files = await ImagePicker().pickMultiImage(
+      imageQuality: 60,
+    );
     List<File> displayFiles = [];
     try {
       // result = await FilePicker.platform.pickFiles(
@@ -174,14 +173,29 @@ class UploadImagesService extends ChangeNotifier {
         files.forEach((element) {
           displayFiles.add(File(element.path.toString()));
         });
-        if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              duration: Duration(seconds: 5),
-              backgroundColor: Color(0xFF45C08D),
-              content: Text("Image Uploading, Please wait"),
-            ),
-          );
+        if (files.length < 4) {
+          debugPrint("image length less than 4");
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                duration: Duration(seconds: 5),
+                backgroundColor: Color(0xFF45C08D),
+                content: Text("Image Uploading, Please wait"),
+              ),
+            );
+          }
+        } else {
+          if (context.mounted) {
+            debugPrint("image length more than 4");
+
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                duration: Duration(seconds: 8),
+                backgroundColor: Color(0xFF45C08D),
+                content: Text("Image Uploading, Please wait"),
+              ),
+            );
+          }
         }
         images.addAll(
             await uploadImagesToFirestore(files: displayFiles, type: type));

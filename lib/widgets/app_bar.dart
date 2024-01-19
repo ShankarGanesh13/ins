@@ -14,10 +14,10 @@ class CustomAppbar extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: () {
-              Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => const HomeScreen()),
-                  (route) => false);
+              // Navigator.pushAndRemoveUntil(
+              //     context,
+              //     MaterialPageRoute(builder: (context) => const HomeScreen()),
+              //     (route) => false);
             },
             child: Image.asset(
               "assets/app_icons/white_app_icon.png",

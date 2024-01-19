@@ -419,18 +419,19 @@ class UploadBasicDetailsService extends ChangeNotifier {
     List<XFile>? files = await ImagePicker().pickMultiImage(imageQuality: 60);
     List<File> displayFiles = [];
     try {
-      // result = await FilePicker.platform.pickFiles(
-      //   type: FileType.image,
-      //   allowMultiple: multipleSelect,
-      // );
+      result = await FilePicker.platform.pickFiles(
+        type: FileType.image,
+        allowMultiple: multipleSelect,
+      );
       if (files.isNotEmpty) {
         files.forEach((element) {
           displayFiles.add(File(element.path.toString()));
         });
+
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
-              duration: Duration(seconds: 5),
+              duration: Duration(seconds: 6),
               backgroundColor: Color(0xFF45C08D),
               content: Text("Image Uploading, Please wait"),
             ),

@@ -90,6 +90,20 @@ class Upload1Image extends StatelessWidget {
                     height: 150,
                     width: MediaQuery.of(context).size.width / 2,
                     fit: BoxFit.contain,
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) {
+                        return child;
+                      } else {
+                        return Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: const Color(0xffE0E0E0),
+                            ),
+                          ),
+                          child: const CircularProgressIndicator(),
+                        );
+                      }
+                    },
                   ),
                 ),
               ),

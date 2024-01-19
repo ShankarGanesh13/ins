@@ -1,7 +1,5 @@
 import 'package:flikcar_inspection/models/body_type.dart';
-import 'package:flikcar_inspection/models/color_model.dart';
 import 'package:flikcar_inspection/models/ownership_type.dart';
-import 'package:flikcar_inspection/screens/vehicle_inspection/basic_document_details/listing_car_features/listing_car_features.dart';
 import 'package:flikcar_inspection/screens/vehicle_inspection/basic_document_details/listing_car_features/widgets/car_comfort.dart';
 import 'package:flikcar_inspection/screens/vehicle_inspection/basic_document_details/listing_car_features/widgets/car_entertainment.dart';
 import 'package:flikcar_inspection/screens/vehicle_inspection/basic_document_details/listing_car_features/widgets/car_exterior.dart';
@@ -23,7 +21,6 @@ import 'package:flikcar_inspection/widgets/multi_line_textfield.dart';
 import 'package:flikcar_inspection/widgets/primary_button.dart';
 import 'package:flikcar_inspection/widgets/upload1_image.dart';
 import 'package:flikcar_inspection/widgets/upload_basic_images.dart';
-import 'package:flikcar_inspection/widgets/upload_images.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -175,12 +172,6 @@ class _BasicDocumentDetailsState extends State<BasicDocumentDetails> {
               ///
               ///
 
-              CustomDropDown(
-                  title: "Registration Type ",
-                  onChanged: (value) {
-                    BasicDocumentDetails.registerationType = value;
-                  },
-                  dropdownItems: const ["Private", "Commercial"]),
               CustomTextField(
                   title: "Registeration Number ",
                   controller: BasicDocumentDetails.controller,
@@ -190,6 +181,221 @@ class _BasicDocumentDetailsState extends State<BasicDocumentDetails> {
                     BasicDocumentDetails.registerationNumber = value;
                   },
                   validator: true),
+              DateTimeTextfield(
+                validate: true,
+                title: "Fitness Upto",
+                onChanged: (value) {
+                  BasicDocumentDetails.fitnessUpto = value;
+                },
+              ),
+              RtoDropdown(selectRto: (value) {
+                debugPrint(value);
+                BasicDocumentDetails.registeredRtoVahan = value;
+              }),
+              //
+              //
+              //
+              SelectBrandModelVarient(
+                brandOnChanged: (value) {
+                  BasicDocumentDetails.brand = value;
+                  debugPrint(value);
+                },
+                modelOnChanged: (value) {
+                  BasicDocumentDetails.model = value;
+                  debugPrint(value);
+                },
+                varientOnChanged: (value) {
+                  BasicDocumentDetails.varient = value;
+                  debugPrint(value);
+                },
+              ),
+              CustomDropDown(
+                  title: "Manufacturing Year",
+                  onChanged: (value) {
+                    BasicDocumentDetails.manufacturingYear = int.parse(value);
+                  },
+                  validate: true,
+                  dropdownItems: getYears()),
+              CustomTextField(
+                  title: "Seating Capacity ",
+                  controller: BasicDocumentDetails.controller,
+                  keyboardType: TextInputType.number,
+                  maxLength: 40,
+                  onChanged: (value) {
+                    BasicDocumentDetails.seatingCapacity = int.parse(value);
+                  },
+                  validator: true),
+              CustomDropDown(
+                  title: "Fuel Type",
+                  onChanged: (value) {
+                    BasicDocumentDetails.fuelType = value;
+                  },
+                  validate: true,
+                  dropdownItems: const ["Petrol", "Diesel", "Electric", "LPG"]),
+              CustomDropDown(
+                  title: "Registration Year ",
+                  onChanged: (value) {
+                    BasicDocumentDetails.registrationYear = int.parse(value);
+                  },
+                  validate: true,
+                  dropdownItems: getYears()),
+              FutureBuilder<List<BodyTypeModel>>(
+                  future: GetBasicDetails.getBodyType(),
+                  builder: (context, snapshot) {
+                    List<String> data = snapshot.data != null
+                        ? snapshot.data!.map((e) => e.bodyType).toList()
+                        : [];
+                    return CustomDropDown(
+                        title: "Body Type ",
+                        onChanged: (value) {
+                          BasicDocumentDetails.bodyType = value;
+                        },
+                        validate: true,
+                        dropdownItems: data);
+                  }),
+              CustomDropDown(
+                  title: "Tansmission Type ",
+                  onChanged: (value) {
+                    BasicDocumentDetails.transmissionType = value;
+                  },
+                  validate: true,
+                  dropdownItems: const ["Automatic", "Manual"]),
+              FutureBuilder<List<OwnerTypeModel>>(
+                  future: GetBasicDetails.getownership(),
+                  builder: (context, snapshot) {
+                    List<String> data = snapshot.data != null
+                        ? snapshot.data!.map((e) => e.ownerType).toList()
+                        : [];
+                    return CustomDropDown(
+                        title: "Owner Type ",
+                        onChanged: (value) {
+                          BasicDocumentDetails.ownerType = value;
+                        },
+                        validate: true,
+                        dropdownItems: data);
+                  }),
+              SelectColor(
+                selectColor: (value) {
+                  BasicDocumentDetails.color = value;
+                },
+              ),
+              CustomTextField(
+                  title: "Kilometers Driven ",
+                  controller: BasicDocumentDetails.controller,
+                  keyboardType: TextInputType.number,
+                  maxLength: 40,
+                  onChanged: (value) {
+                    BasicDocumentDetails.kmsDriven = int.parse(value);
+                  },
+                  validator: true),
+
+              CustomDropDown(
+                  title: "Manufacturing Month",
+                  onChanged: (value) {
+                    BasicDocumentDetails.manufacturingMonth = value;
+                  },
+                  validate: true,
+                  dropdownItems: const [
+                    "Jan",
+                    "Feb",
+                    "Mar",
+                    "Apr",
+                    "May",
+                    "Jun",
+                    "Jul",
+                    "Aug",
+                    "Sep",
+                    "Oct",
+                    "Dec"
+                  ]),
+              MultiLineTextfield(
+                  title: "Inspection Report ",
+                  keyboardType: TextInputType.multiline,
+                  onChanged: (value) {
+                    BasicDocumentDetails.inspectionReport = value;
+                  },
+                  validator: true),
+              CustomTextField(
+                  title: "Inspection Score ",
+                  controller: BasicDocumentDetails.controller,
+                  keyboardType: TextInputType.number,
+                  maxLength: 4,
+                  onChanged: (value) {
+                    BasicDocumentDetails.inspectionScore = int.parse(value);
+                  },
+                  validator: true),
+              MultiLineTextfield(
+                  title: "Description",
+                  keyboardType: TextInputType.multiline,
+                  onChanged: (value) {
+                    BasicDocumentDetails.description = value;
+                  },
+                  validator: false),
+
+              Upload1Image(
+                  title: "Thumbnail",
+                  image:
+                      context.watch<UploadImagesService>().thumbnailImagePath,
+                  camerafunction: () {
+                    Provider.of<UploadImagesService>(context, listen: false)
+                        .carImagesCamera(context: context, type: "thumbnail");
+                  },
+                  galleryfunction: () {
+                    Provider.of<UploadImagesService>(context, listen: false)
+                        .pickCarImages(context: context, type: "thumbnail");
+                  }),
+
+              //
+              //
+              //
+              //
+              //
+              //
+              //
+              //
+              //
+              CustomDropDown(
+                  title: "Registration Type ",
+                  onChanged: (value) {
+                    BasicDocumentDetails.registerationType = value;
+                  },
+                  dropdownItems: const ["Private", "Commercial"]),
+              CustomTextField(
+                  title: "Engine CC ",
+                  controller: BasicDocumentDetails.controller,
+                  keyboardType: TextInputType.number,
+                  maxLength: 40,
+                  onChanged: (value) {
+                    BasicDocumentDetails.engineCC = value;
+                  },
+                  validator: false),
+              CustomTextField(
+                  title: "Mileage ",
+                  controller: BasicDocumentDetails.controller,
+                  keyboardType: TextInputType.number,
+                  maxLength: 40,
+                  onChanged: (value) {
+                    BasicDocumentDetails.mileage = value;
+                  },
+                  validator: false),
+              CustomTextField(
+                  title: "Max Power ",
+                  controller: BasicDocumentDetails.controller,
+                  keyboardType: TextInputType.number,
+                  maxLength: 40,
+                  onChanged: (value) {
+                    BasicDocumentDetails.maxPower = value;
+                  },
+                  validator: false),
+              CustomTextField(
+                  title: "Max Torque ",
+                  controller: BasicDocumentDetails.controller,
+                  keyboardType: TextInputType.number,
+                  maxLength: 40,
+                  onChanged: (value) {
+                    BasicDocumentDetails.maxTorque = value;
+                  },
+                  validator: false),
               CustomDropDown(
                   title: "RC Availability ",
                   onChanged: (value) {
@@ -234,13 +440,7 @@ class _BasicDocumentDetailsState extends State<BasicDocumentDetails> {
                   BasicDocumentDetails.registerationDate = value;
                 },
               ),
-              DateTimeTextfield(
-                validate: true,
-                title: "Fitness Upto",
-                onChanged: (value) {
-                  BasicDocumentDetails.fitnessUpto = value;
-                },
-              ),
+
               CustomDropDown(
                   title: "To be Scrapped ",
                   onChanged: (value) {
@@ -262,27 +462,7 @@ class _BasicDocumentDetailsState extends State<BasicDocumentDetails> {
               /////
               ///
               ///
-              RtoDropdown(selectRto: (value) {
-                debugPrint(value);
-                BasicDocumentDetails.registeredRtoVahan = value;
-              }),
-              //
-              //
-              //
-              SelectBrandModelVarient(
-                brandOnChanged: (value) {
-                  BasicDocumentDetails.brand = value;
-                  debugPrint(value);
-                },
-                modelOnChanged: (value) {
-                  BasicDocumentDetails.model = value;
-                  debugPrint(value);
-                },
-                varientOnChanged: (value) {
-                  BasicDocumentDetails.varient = value;
-                  debugPrint(value);
-                },
-              ),
+
               CustomTextField(
                   title: "Owner Serial No. ",
                   controller: BasicDocumentDetails.controller,
@@ -339,49 +519,6 @@ class _BasicDocumentDetailsState extends State<BasicDocumentDetails> {
                   validator: false),
 
               CustomDropDown(
-                  title: "Manufacturing Month",
-                  onChanged: (value) {
-                    BasicDocumentDetails.manufacturingMonth = value;
-                  },
-                  validate: true,
-                  dropdownItems: const [
-                    "Jan",
-                    "Feb",
-                    "Mar",
-                    "Apr",
-                    "May",
-                    "Jun",
-                    "Jul",
-                    "Aug",
-                    "Sep",
-                    "Oct",
-                    "Dec"
-                  ]),
-
-              CustomDropDown(
-                  title: "Manufacturing Year",
-                  onChanged: (value) {
-                    BasicDocumentDetails.manufacturingYear = int.parse(value);
-                  },
-                  validate: true,
-                  dropdownItems: getYears()),
-              CustomDropDown(
-                  title: "Fuel Type",
-                  onChanged: (value) {
-                    BasicDocumentDetails.fuelType = value;
-                  },
-                  validate: true,
-                  dropdownItems: const ["Petrol", "Diesel", "Electric", "LPG"]),
-              CustomTextField(
-                  title: "Engine CC ",
-                  controller: BasicDocumentDetails.controller,
-                  keyboardType: TextInputType.number,
-                  maxLength: 40,
-                  onChanged: (value) {
-                    BasicDocumentDetails.engineCC = value;
-                  },
-                  validator: false),
-              CustomDropDown(
                   title: "Hypothecation Details ",
                   onChanged: (value) {
                     BasicDocumentDetails.hypothecationDetails = value;
@@ -410,15 +547,6 @@ class _BasicDocumentDetailsState extends State<BasicDocumentDetails> {
                 title: "Hypothecation Image",
               ),
 
-              CustomTextField(
-                  title: "Seating Capacity ",
-                  controller: BasicDocumentDetails.controller,
-                  keyboardType: TextInputType.number,
-                  maxLength: 40,
-                  onChanged: (value) {
-                    BasicDocumentDetails.seatingCapacity = int.parse(value);
-                  },
-                  validator: true),
               CustomDropDown(
                   title: "Mismatch in RC ",
                   onChanged: (value) {
@@ -507,9 +635,13 @@ class _BasicDocumentDetailsState extends State<BasicDocumentDetails> {
                   },
                   dropdownItems: const [
                     "10%",
+                    "15%",
                     "20%",
+                    "25%",
                     "30%",
+                    "35%",
                     "40%",
+                    "45%",
                     "50%",
                     "above 50%"
                   ]),
@@ -583,127 +715,6 @@ class _BasicDocumentDetailsState extends State<BasicDocumentDetails> {
                 },
                 validate: false,
               ),
-
-              CustomDropDown(
-                  title: "Registration Year ",
-                  onChanged: (value) {
-                    BasicDocumentDetails.registrationYear = int.parse(value);
-                  },
-                  validate: true,
-                  dropdownItems: getYears()),
-
-              FutureBuilder<List<BodyTypeModel>>(
-                  future: GetBasicDetails.getBodyType(),
-                  builder: (context, snapshot) {
-                    List<String> data = snapshot.data != null
-                        ? snapshot.data!.map((e) => e.bodyType).toList()
-                        : [];
-                    return CustomDropDown(
-                        title: "Body Type ",
-                        onChanged: (value) {
-                          BasicDocumentDetails.bodyType = value;
-                        },
-                        validate: true,
-                        dropdownItems: data);
-                  }),
-              CustomDropDown(
-                  title: "Tansmission Type ",
-                  onChanged: (value) {
-                    BasicDocumentDetails.transmissionType = value;
-                  },
-                  validate: true,
-                  dropdownItems: const ["Automatic", "Manual"]),
-              FutureBuilder<List<OwnerTypeModel>>(
-                  future: GetBasicDetails.getownership(),
-                  builder: (context, snapshot) {
-                    List<String> data = snapshot.data != null
-                        ? snapshot.data!.map((e) => e.ownerType).toList()
-                        : [];
-                    return CustomDropDown(
-                        title: "Owner Type ",
-                        onChanged: (value) {
-                          BasicDocumentDetails.ownerType = value;
-                        },
-                        validate: true,
-                        dropdownItems: data);
-                  }),
-              SelectColor(
-                selectColor: (value) {
-                  BasicDocumentDetails.color = value;
-                },
-              ),
-              CustomTextField(
-                  title: "Kilometers Driven ",
-                  controller: BasicDocumentDetails.controller,
-                  keyboardType: TextInputType.number,
-                  maxLength: 40,
-                  onChanged: (value) {
-                    BasicDocumentDetails.kmsDriven = int.parse(value);
-                  },
-                  validator: true),
-
-              MultiLineTextfield(
-                  title: "Description",
-                  keyboardType: TextInputType.multiline,
-                  onChanged: (value) {
-                    BasicDocumentDetails.description = value;
-                  },
-                  validator: false),
-              CustomTextField(
-                  title: "Mileage ",
-                  controller: BasicDocumentDetails.controller,
-                  keyboardType: TextInputType.number,
-                  maxLength: 40,
-                  onChanged: (value) {
-                    BasicDocumentDetails.mileage = value;
-                  },
-                  validator: false),
-              CustomTextField(
-                  title: "Max Power ",
-                  controller: BasicDocumentDetails.controller,
-                  keyboardType: TextInputType.number,
-                  maxLength: 40,
-                  onChanged: (value) {
-                    BasicDocumentDetails.maxPower = value;
-                  },
-                  validator: false),
-              CustomTextField(
-                  title: "Max Torque ",
-                  controller: BasicDocumentDetails.controller,
-                  keyboardType: TextInputType.number,
-                  maxLength: 40,
-                  onChanged: (value) {
-                    BasicDocumentDetails.maxTorque = value;
-                  },
-                  validator: false),
-              MultiLineTextfield(
-                  title: "Inspection Report ",
-                  keyboardType: TextInputType.multiline,
-                  onChanged: (value) {
-                    BasicDocumentDetails.inspectionReport = value;
-                  },
-                  validator: true),
-              CustomTextField(
-                  title: "Inspection Score ",
-                  controller: BasicDocumentDetails.controller,
-                  keyboardType: TextInputType.number,
-                  maxLength: 4,
-                  onChanged: (value) {
-                    BasicDocumentDetails.inspectionScore = int.parse(value);
-                  },
-                  validator: true),
-              Upload1Image(
-                  title: "Thumbnail",
-                  image:
-                      context.watch<UploadImagesService>().thumbnailImagePath,
-                  camerafunction: () {
-                    Provider.of<UploadImagesService>(context, listen: false)
-                        .carImagesCamera(context: context, type: "thumbnail");
-                  },
-                  galleryfunction: () {
-                    Provider.of<UploadImagesService>(context, listen: false)
-                        .pickCarImages(context: context, type: "thumbnail");
-                  }),
 
               const CommentsOnBasicDetails(),
               const SizedBox(

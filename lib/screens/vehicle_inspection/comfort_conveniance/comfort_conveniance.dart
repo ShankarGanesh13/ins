@@ -83,6 +83,7 @@ class ComfortConveniance extends StatelessWidget {
                   "Not Applicable",
                   "Normal Stereo",
                   "Touch Stereo",
+                  "Custom Fitted"
                 ]),
             CustomDropDown(
                 title: "Inbuilt Speaker ",

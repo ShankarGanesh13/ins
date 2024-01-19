@@ -84,7 +84,9 @@ class _DateTimeTextfieldState extends State<DateTimeTextfield> {
             margin: const EdgeInsets.only(bottom: 15),
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
-                border: Border.all(color: const Color(0xff606060)),
+                border: Border.all(
+                  color: const Color(0xff606060),
+                ),
                 borderRadius: BorderRadius.circular(3)),
             child: Row(children: [
               selectedDate != null

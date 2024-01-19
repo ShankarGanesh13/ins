@@ -112,6 +112,28 @@ class UploadBasicImages extends StatelessWidget {
                               child: Image.network(
                                 imagePath[index],
                                 fit: BoxFit.contain,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Container(
+                                      decoration: BoxDecoration(
+                                          border: Border.all(
+                                        color: const Color(0xffE0E0E0),
+                                      )),
+                                      child: const Icon(Icons.error));
+                                },
+                                loadingBuilder:
+                                    (context, child, loadingProgress) {
+                                  if (loadingProgress == null) {
+                                    return child;
+                                  } else {
+                                    return Container(
+                                      decoration: BoxDecoration(
+                                          border: Border.all(
+                                        color: const Color(0xffE0E0E0),
+                                      )),
+                                      child: const CircularProgressIndicator(),
+                                    );
+                                  }
+                                },
                               ),
                             ),
                           ],

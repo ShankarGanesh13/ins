@@ -1,12 +1,8 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:file_picker/file_picker.dart';
+
 import 'package:flikcar_inspection/models/feature_model.dart';
 import 'package:flikcar_inspection/models/image_model.dart';
 import 'package:flutter/material.dart';
-import 'package:video_player/video_player.dart';
-import 'package:video_thumbnail/video_thumbnail.dart';
 
 class EngineTransmissonService extends ChangeNotifier {
   List<FeatureModel> commentsOnTransmission = [

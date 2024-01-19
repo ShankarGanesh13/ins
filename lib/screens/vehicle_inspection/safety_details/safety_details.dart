@@ -59,7 +59,7 @@ class SafetyDetails extends StatelessWidget {
                 onChanged: (value) {
                   noOfAirbags = value;
                 },
-                validator: true),
+                validator: false),
             CustomDropDown(
                 title: "ABS ",
                 onChanged: (value) {

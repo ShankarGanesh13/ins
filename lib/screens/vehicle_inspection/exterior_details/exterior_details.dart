@@ -33,14 +33,13 @@ class ExteriorDetails extends StatelessWidget {
   ];
 
   static List<String> tyre = [
-    "Chinese Tyre",
-    "Resoaled",
-    "Damaged",
-    "Tyre Life (10-25mm)",
-    "Tyre Life (26-50mm)",
-    "Tyre Life (51-75mm)",
-    "Tyre Life (76-100mm)",
+    "0-2mm",
+    "2-4mm",
+    "4-6mm",
+    "6-8mm",
+    "8-10mm",
   ];
+
   String? bootDoor;
   String? bootFloor;
   String? bonnet;
@@ -216,7 +215,7 @@ class ExteriorDetails extends StatelessWidget {
                 },
                 dropdownItems: exterior),
             CustomDropDown(
-                title: "LHS Front Alloy ",
+                title: "LHS Front Wheel ",
                 onChanged: (value) {
                   lhsFrontAlloy = value;
                 },
@@ -270,7 +269,7 @@ class ExteriorDetails extends StatelessWidget {
                 },
                 dropdownItems: exterior),
             CustomDropDown(
-                title: "LHS Rear Alloy ",
+                title: "LHS Rear Wheel ",
                 onChanged: (value) {
                   lhsRearAlloy = value;
                 },
@@ -336,7 +335,7 @@ class ExteriorDetails extends StatelessWidget {
                 },
                 dropdownItems: exterior),
             CustomDropDown(
-                title: "RHS Rear Alloy ",
+                title: "RHS Rear Wheel ",
                 onChanged: (value) {
                   rhsRearAlloy = value;
                 },
@@ -384,7 +383,7 @@ class ExteriorDetails extends StatelessWidget {
                 },
                 dropdownItems: exterior),
             CustomDropDown(
-                title: "RHS Front Alloy ",
+                title: "RHS Front Wheel ",
                 onChanged: (value) {
                   rhsFrontAlloy = value;
                 },
