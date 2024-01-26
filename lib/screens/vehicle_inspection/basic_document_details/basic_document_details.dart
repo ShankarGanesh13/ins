@@ -39,8 +39,8 @@ class BasicDocumentDetails extends StatefulWidget {
   static String? registerationNumber;
   static String? rcAvailability;
   static String? rcCondition;
-  static String? registerationDate;
-  static String? fitnessUpto;
+  static int? registerationDate;
+  static int? fitnessUpto;
   static String? toBeScrapped;
   static String? registerationState;
   static String? registeredRtoVahan;
@@ -125,15 +125,7 @@ class _BasicDocumentDetailsState extends State<BasicDocumentDetails> {
               //       BasicDocumentDetails.appointmentId = value;
               //     },
               //     validator: true),
-              CustomTextField(
-                  title: "Inspector Name ",
-                  controller: BasicDocumentDetails.controller,
-                  keyboardType: TextInputType.name,
-                  maxLength: 25,
-                  onChanged: (value) {
-                    BasicDocumentDetails.inspectorName = value;
-                  },
-                  validator: true),
+
               CustomTextField(
                   title: "Customer Contact Number ",
                   controller: BasicDocumentDetails.controller,
@@ -143,7 +135,15 @@ class _BasicDocumentDetailsState extends State<BasicDocumentDetails> {
                     BasicDocumentDetails.customerContactNumber = value;
                   },
                   validator: true),
-
+              CustomTextField(
+                  title: "Registered Owner Name ",
+                  controller: BasicDocumentDetails.controller,
+                  keyboardType: TextInputType.name,
+                  maxLength: 40,
+                  onChanged: (value) {
+                    BasicDocumentDetails.registeredOwnerName = value;
+                  },
+                  validator: true),
               CustomTextField(
                   title: "Customer Expected Price ",
                   controller: BasicDocumentDetails.controller,
@@ -158,15 +158,14 @@ class _BasicDocumentDetailsState extends State<BasicDocumentDetails> {
               ///
               ///
               ///
-              CustomTextField(
-                  title: "City ",
-                  controller: BasicDocumentDetails.controller,
-                  keyboardType: TextInputType.name,
-                  maxLength: 30,
+
+              CustomDropDown(
+                  title: "City",
                   onChanged: (value) {
                     BasicDocumentDetails.city = value;
                   },
-                  validator: true),
+                  validate: true,
+                  dropdownItems: ["Kolkata"]),
 
               ///
               ///
@@ -185,7 +184,7 @@ class _BasicDocumentDetailsState extends State<BasicDocumentDetails> {
                 validate: true,
                 title: "Fitness Upto",
                 onChanged: (value) {
-                  BasicDocumentDetails.fitnessUpto = value;
+                  BasicDocumentDetails.fitnessUpto = int.parse(value);
                 },
               ),
               RtoDropdown(selectRto: (value) {
@@ -288,7 +287,20 @@ class _BasicDocumentDetailsState extends State<BasicDocumentDetails> {
                     BasicDocumentDetails.kmsDriven = int.parse(value);
                   },
                   validator: true),
-
+              DateTimeTextfield(
+                validate: true,
+                title: "Registeration Date",
+                onChanged: (value) {
+                  BasicDocumentDetails.registerationDate = int.parse(value);
+                },
+              ),
+              CustomDropDown(
+                  title: "Registration Type ",
+                  onChanged: (value) {
+                    BasicDocumentDetails.registerationType = value;
+                  },
+                  validate: true,
+                  dropdownItems: const ["Private", "Commercial"]),
               CustomDropDown(
                   title: "Manufacturing Month",
                   onChanged: (value) {
@@ -306,6 +318,7 @@ class _BasicDocumentDetailsState extends State<BasicDocumentDetails> {
                     "Aug",
                     "Sep",
                     "Oct",
+                    "Nov",
                     "Dec"
                   ]),
               MultiLineTextfield(
@@ -354,12 +367,7 @@ class _BasicDocumentDetailsState extends State<BasicDocumentDetails> {
               //
               //
               //
-              CustomDropDown(
-                  title: "Registration Type ",
-                  onChanged: (value) {
-                    BasicDocumentDetails.registerationType = value;
-                  },
-                  dropdownItems: const ["Private", "Commercial"]),
+
               CustomTextField(
                   title: "Engine CC ",
                   controller: BasicDocumentDetails.controller,
@@ -433,13 +441,6 @@ class _BasicDocumentDetailsState extends State<BasicDocumentDetails> {
                     "Faded",
                     "Not Applicable",
                   ]),
-              DateTimeTextfield(
-                validate: false,
-                title: "Registeration Date",
-                onChanged: (value) {
-                  BasicDocumentDetails.registerationDate = value;
-                },
-              ),
 
               CustomDropDown(
                   title: "To be Scrapped ",
@@ -508,15 +509,6 @@ class _BasicDocumentDetailsState extends State<BasicDocumentDetails> {
                     context.watch<UploadBasicDetailsService>().chassisImages,
                 title: "Chassis Images",
               ),
-              CustomTextField(
-                  title: "Registered Owner Name ",
-                  controller: BasicDocumentDetails.controller,
-                  keyboardType: TextInputType.name,
-                  maxLength: 40,
-                  onChanged: (value) {
-                    BasicDocumentDetails.registeredOwnerName = value;
-                  },
-                  validator: false),
 
               CustomDropDown(
                   title: "Hypothecation Details ",

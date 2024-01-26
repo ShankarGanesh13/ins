@@ -24,6 +24,7 @@ class AuthService {
             MaterialPageRoute(builder: (context) => HomeScreen()),
             (route) => false);
         await prefs.setBool('login', true);
+        await prefs.setString('userId', user["id"]);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(

@@ -15,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UploadBasicDetailsService extends ChangeNotifier {
   FilePickerResult? result;
@@ -526,7 +527,7 @@ class UploadBasicDetailsService extends ChangeNotifier {
     }
   }
 
-  String uploadBasicDocuments({
+  uploadBasicDocuments({
     required String inspectorName,
     required String carId,
     required int customerExpectedPrice,
@@ -537,8 +538,8 @@ class UploadBasicDetailsService extends ChangeNotifier {
     String? regNo,
     String? rcAvailablilty,
     String? rcCondition,
-    String? regDate,
-    String? fittnessUpto,
+    int? regDate,
+    int? fittnessUpto,
     String? tobeScraped,
     String? regState,
     String? rtoLocation,
@@ -579,7 +580,10 @@ class UploadBasicDetailsService extends ChangeNotifier {
     int? inspectionScore,
     String? noc,
     String? thumbnailImage,
-  }) {
+  }) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? inspectorId = prefs.getString('userId');
+
     Map<String, dynamic> basicDocuments = {
       "appointmentId": DateTime.now().millisecondsSinceEpoch,
       "custContactNo": custContactNo,
@@ -666,7 +670,7 @@ class UploadBasicDetailsService extends ChangeNotifier {
         "basicDocuments": basicDocuments,
         "vehicleId": carId,
         "createdAt": DateTime.now().millisecondsSinceEpoch,
-        "inspectorId": "2",
+        "inspectorId": inspectorId,
         "pdfUrl": null,
       });
       return "SUCCESS";
@@ -715,6 +719,7 @@ class UploadBasicDetailsService extends ChangeNotifier {
       "latestBid": null,
       "oneClickBuyPrice": null,
       "startPrice": 0,
+      "createdAt": DateTime.now().millisecondsSinceEpoch,
       "startTime": 1686559681620,
     };
     try {
@@ -827,8 +832,8 @@ class UploadBasicDetailsService extends ChangeNotifier {
       String? regNo,
       String? rcAvailablilty,
       String? rcCondition,
-      String? regDate,
-      String? fittnessUpto,
+      int? regDate,
+      int? fittnessUpto,
       String? tobeScraped,
       String? regState,
       String? rtoLocation,

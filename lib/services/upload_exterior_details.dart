@@ -33,6 +33,8 @@ class UploadExteriorDetailsService extends ChangeNotifier {
     String? bootFloor,
     String? bonnet,
     String? cowlTop,
+    String? lhsApron,
+    String? rhsApron,
     required List<ImageModel> dentImages, // optional
     required List<ImageModel> exteriorImages,
     String? firewall,
@@ -141,6 +143,8 @@ class UploadExteriorDetailsService extends ChangeNotifier {
       "upperCrossMember": upperCrossMember,
       "lhsTailLamp": lhsTailLamp,
       "rhsTailLamp": rhsTailLamp,
+      "lhsApron": lhsApron,
+      "rhsApron": rhsApron,
     };
     try {
       FirebaseFirestore firestore = FirebaseFirestore.instance;
